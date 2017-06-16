@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+			<p:dataTable
+				id="tabelaItens" style="margin-top: 20px;margin-bottom: 20px;" emptyMessage="Nenhum item encontrado." 
+				var="item" value="#{cadastroAgendamentoBean.agendamento.itens}" >
+
+				<p:column headerText="Id"
+					style="text-align: left; width: 100px">
+					<h:outputText value="#{item.produto.id}"/>
+				</p:column>
+				<p:column headerText="Produto"
+					style="text-align: left; width: 100px">
+					<h:outputText value="#{item.produto.rotulo}"/>
+				</p:column>
+				<p:column headerText="Nota" style="width: 100px">
+					<h:outputText value="#{item.notaFiscal}" />
+				</p:column>
+				<p:column headerText="Status" style="width: 100px">
+					<h:outputText value="#{item.statusItem.descricao}" />
+				</p:column>
+				
+			</p:dataTable>
+  	
+</ui:composition>

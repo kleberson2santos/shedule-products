@@ -1,0 +1,69 @@
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:o="http://omnifaces.org/ui">
+    
+	<p:panelGrid columns="4"
+		style="width: 100%;height:100px;position:relative;margin-top: 20px;margin-bottom: 20px;">
+		<p:outputLabel value="Número" for="numero"
+			rendered="#{cadastroAgendamentoBean.agendamento.existente}" />
+		<h:outputText id="numero" size="10"
+			value="#{cadastroAgendamentoBean.agendamento.id}"
+			rendered="#{cadastroAgendamentoBean.agendamento.existente}" />
+
+		<p:outputLabel value="Data de criação" for="dataCriacao"
+			rendered="#{cadastroAgendamentoBean.agendamento.existente}" />
+		<h:outputText id="dataCriacao" size="10"
+			value="#{cadastroAgendamentoBean.agendamento.dataCriacao}"
+			rendered="#{cadastroAgendamentoBean.agendamento.existente}">
+			<f:convertDateTime pattern=" dd/MM/yyyy" />
+		</h:outputText>
+
+		<p:outputLabel value="Status" />
+		<h:outputText
+			value="#{cadastroAgendamentoBean.agendamento.status.descricao}" />
+
+		<p:outputLabel value="Data da Montagem" for="dataMontagem" />
+		<h:panelGroup>
+			<p:calendar id="dataMontagem" size="10" pattern="dd/MM/yyyy"
+				value="#{cadastroAgendamentoBean.agendamento.dataMontagem}" />
+			<p:button icon="ui-icon-search" title="Disponibilidade" />
+		</h:panelGroup>
+				
+		<p:outputLabel value="Cliente" for="cliente"/>
+        <h:panelGroup>
+	        <p:inputText id="cliente" size="40" value="#{cadastroAgendamentoBean.nomeCliente}" 
+	        	readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
+	        	
+	        <p:commandButton icon="ui-icon-search" title="Pesquisar" process="@this"
+	        	update="@none"
+	        	action="#{selecaoClienteFirebirdBean.abrirDialogo}"
+	        	ignoreAutoUpdate="true" rendered="#{not cadastroAgendamentoBean.editando}">
+	        	<p:ajax event="dialogReturn" listener="#{cadastroAgendamentoBean.clienteSelecionado}"
+				update="cliente notas" ignoreAutoUpdate="true" />
+	        </p:commandButton>
+        </h:panelGroup>		
+		
+	</p:panelGrid>
+
+	<p:dataTable id="notas" var="saida"
+		value="#{cadastroAgendamentoBean.agendamento.saidas}"
+		selection="#{cadastroAgendamentoBean.saidasSelecionadas}"
+		rowKey="#{saida.saida}"
+		style="margin-bottom:0" rendered="#{not cadastroAgendamentoBean.editando}" 
+		process="@this">
+		
+		<p:column selectionMode="multiple"
+			style="width:16px;text-align:center" />
+		<p:column headerText="Nota" >
+			<h:outputText value="#{saida.nota}" />
+		</p:column>
+		<f:facet name="footer">
+            <p:commandButton process="notas" value="Adicionar Produtos" update=":frmCadastro:tabelaItens"
+            action="#{cadastroAgendamentoBean.atualizarProdutos}"/>
+        </f:facet>
+	</p:dataTable>
+
+</ui:composition>

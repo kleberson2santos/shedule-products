@@ -1,0 +1,1 @@
+2017-05-09 16:58:38,043 INFO  [org.hibernate.jpa.boot.internal.PersistenceXmlParser] HHH000318: Could not find any META-INF/persistence.xml file in the classpath
