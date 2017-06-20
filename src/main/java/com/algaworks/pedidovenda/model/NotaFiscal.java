@@ -1,7 +1,6 @@
 package com.algaworks.pedidovenda.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +22,6 @@ public class NotaFiscal implements Serializable{
 	private Integer saida;
 	private Integer nota;
 	private Agendamento agendamento;
-	private List<NotaFiscal> notas;
 	
 	public NotaFiscal(){}
 	

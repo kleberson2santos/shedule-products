@@ -152,14 +152,14 @@ public class Agendamentos implements Serializable {
 		return this.manager.find(Agendamento.class, id);
 	}
 
-	public Map<Date, Integer> valoresPorData(Integer numeroDeDias, Usuario criadoPor) {
+	public Map<Date, Long> valoresPorData(Integer numeroDeDias, Usuario criadoPor) {
 		numeroDeDias -= 1;
 		
 		Calendar dataInicial = Calendar.getInstance();
 		dataInicial = DateUtils.truncate(dataInicial, Calendar.DAY_OF_MONTH);
 		dataInicial.add(Calendar.DAY_OF_MONTH, numeroDeDias * -1);
 		
-		Map<Date, Integer> resultado = criarMapaVazio(numeroDeDias, dataInicial);
+		Map<Date, Long> resultado = criarMapaVazio(numeroDeDias, dataInicial);
 		
 		String jpql = "select new com.algaworks.pedidovenda.model.vo.DataQuantidade(date(a.dataCriacao), count(a)) "
 				+ "from Agendamento a where a.dataCriacao >= :dataInicial ";
@@ -187,12 +187,12 @@ public class Agendamentos implements Serializable {
 		return resultado;
 	}
 
-	private Map<Date, Integer> criarMapaVazio(Integer numeroDeDias, Calendar dataInicial) {
+	private Map<Date, Long> criarMapaVazio(Integer numeroDeDias, Calendar dataInicial) {
 		dataInicial = (Calendar) dataInicial.clone();
-		Map<Date, Integer> mapaInicial = new TreeMap<>();
+		Map<Date, Long> mapaInicial = new TreeMap<>();
 
 		for (int i = 0; i <= numeroDeDias; i++) {
-			mapaInicial.put(dataInicial.getTime(), 0);
+			mapaInicial.put(dataInicial.getTime(), 0L);
 			dataInicial.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		

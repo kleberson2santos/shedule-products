@@ -8,12 +8,12 @@ public class DataQuantidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Date data;
-	private Integer valor;
+	private Long valor;
 
 	public DataQuantidade() {
 	}
 	
-	public DataQuantidade(Date data, Integer valor) {
+	public DataQuantidade(Date data, Long valor) {
 		super();
 		this.data = data;
 		this.valor = valor;
@@ -27,11 +27,11 @@ public class DataQuantidade implements Serializable {
 		this.data = data;
 	}
 
-	public Integer getValor() {
+	public Long getValor() {
 		return valor;
 	}
 
-	public void setValor(Integer valor) {
+	public void setValor(Long valor) {
 		this.valor = valor;
 	}
 

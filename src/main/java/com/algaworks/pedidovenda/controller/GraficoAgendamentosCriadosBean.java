@@ -47,7 +47,7 @@ public class GraficoAgendamentosCriadosBean {
 	}
 	
 	private void adicionarSerie(String rotulo, Usuario criadoPor) {
-		Map<Date, Integer> quantidadePorData = this.agendamentos.valoresPorData(15, criadoPor);
+		Map<Date, Long> quantidadePorData = this.agendamentos.valoresPorData(15, criadoPor);
 		
 		ChartSeries series = new ChartSeries(rotulo);
 		

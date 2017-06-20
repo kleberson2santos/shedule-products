@@ -7,14 +7,14 @@
 
 	<f:metadata>
 		<f:viewParam name="dummy"/>
-		<f:event listener="#{graficoPedidosCriadosBean.preRender}" type="preRenderView"/>
+		<f:event listener="#{graficoAgendamentosCriadosBean.preRender}" type="preRenderView"/>
 	</f:metadata>
 
 	<ui:define name="titulo">Dashboard</ui:define>
 
 	<ui:define name="corpo">
 		
-		<p:chart type="line" model="#{graficoPedidosCriadosBean.model}"
+		<p:chart type="line" model="#{graficoAgendamentosCriadosBean.model}"
 			style="height: 400px" />
 		
 	</ui:define>
