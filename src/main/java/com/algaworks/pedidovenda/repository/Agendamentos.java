@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -85,6 +86,7 @@ public class Agendamentos implements Serializable {
 		
 		return predicates;
 	}
+	
 	
 	
 	public List<Agendamento> filtrados(AgendamentoFilter filtro) {
@@ -197,6 +199,20 @@ public class Agendamentos implements Serializable {
 		}
 		
 		return mapaInicial;
+	}
+
+	public List<Agendamento> todos() {		
+		return manager.createQuery("from Agendamento",Agendamento.class).getResultList();
+	}
+	
+	public List<Agendamento> filtradosEntre(Date inicio, Date fim) {
+		TypedQuery<Agendamento> query = manager.createQuery("SELECT a FROM Agendamento a "
+				+ "where a.dataMontagem between :inicio AND :fim", Agendamento.class)
+				.setParameter("inicio", inicio, TemporalType.DATE)
+                .setParameter("fim", fim, TemporalType.DATE);
+		List<Agendamento> results = query.getResultList();
+		
+		return results;
 	}
 
 }

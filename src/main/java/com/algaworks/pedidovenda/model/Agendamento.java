@@ -79,7 +79,7 @@ public class Agendamento implements Serializable {
 	}
 	
 	@NotNull
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_montagem" , nullable = false)
 	public Date getDataMontagem() {
 		return dataMontagem;

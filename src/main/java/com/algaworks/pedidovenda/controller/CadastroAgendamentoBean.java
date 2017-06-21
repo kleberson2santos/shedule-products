@@ -2,6 +2,7 @@ package com.algaworks.pedidovenda.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.event.Observes;
@@ -45,6 +46,7 @@ public class CadastroAgendamentoBean implements Serializable {
 	private ArrayList<Integer> saidasCodigos;
 	
 	private ItemMontagem itemSelecionado;
+	private Date dataAgendamentoSelecionada;
 
 	public CadastroAgendamentoBean() {
 		limpar();
@@ -54,17 +56,8 @@ public class CadastroAgendamentoBean implements Serializable {
 		if (this.agendamento == null) {
 			limpar();
 		}else{
-			System.out.println(" >>AGENDAMENTO PARA EDITAR: ");
-			System.out.println(" >>: "+agendamento);
-			setSaidasSelecionadas(agendamento.getSaidas());	
-			System.out.println("Saidas Firebird = Saidas Selecionadas : "+saidasFirebird);			
+			setSaidasSelecionadas(agendamento.getSaidas());			
 		}
-		
-//		this.vendedores = this.usuarios.vendedores();
-//		
-//		this.pedido.adicionarItemVazio();
-//		
-//		this.recalcularPedido();
 	}
 
 	private void limpar() {
@@ -79,64 +72,51 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	public void clienteSelecionado(SelectEvent event){
 		this.clienteFilter = (Cliente)event.getObject();
-		System.out.println("CLIENTEFILTER : "+clienteFilter);
 		atualizarSaidas();
 		agendamento.setCliente((Cliente)event.getObject());		
 	}
+	
+	public void dataAgendamentoSelecionada(SelectEvent event){
+		this.agendamento.setDataMontagem((Date)event.getObject());
+	}
 
 	private void atualizarSaidas() {
-		System.out.println(" 2 - ATUALIZANDO SAIDAS PELO CLIENTE SELECIONADO");
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
-		
-
 		List<NotaFiscal> saidasAgendadas = clientes.buscarSaidasSistema(clienteFilter);
-		System.out.println("LISTA DE SAIDAS AGENDADAS PARA O CLIENTE");
 		System.out.println(saidasAgendadas);
-		
-		System.out.println("SAIDAS QUERY: " + saidasAgendadas);
 		saidasFirebird = clientes.buscarSaidasPorCliente(this.clienteFilter);
-		
-		//novo
 		this.agendamento.setSaidas(saidasFirebird);
-
 	}
 
 	private void limparSaidas() {
-		System.out.println("LIMPANDO SAIDAS INTEIROS E ITENS");
 		this.agendamento.removerItens();
 		this.saidasCodigos.clear();
-
 	}
 
 	public void atualizarProdutos() {
-		System.out.println(" 3 - ENVIA SAIDAS SELECIONADAS E BUSCA PRODUTOS: ");
 		limparSaidas();
 		notasSelecionadas.forEach(i -> System.out.println("[]-" + i));
 		List<ItemMontagem> itens = new ArrayList<ItemMontagem>();
-
 		for (NotaFiscal notaFiscal : notasSelecionadas) {
 			this.saidasCodigos.add(notaFiscal.getSaida());
 		}
-
 		itens = clientes.buscarProdutosPorSaidasSelecionadas(saidasCodigos);
 		if (itens.isEmpty()) {
 			FacesUtil.addWarningMessage("A busca não retornou nenhum móvel!");
 		}
-
 		for (ItemMontagem itemMontagem : itens) {
 			agendamento.adiciona(itemMontagem);
-			
 		}
-
 	}
 
+	
 	// GETTERS AND SETTERS
 
+	
 	public Cliente getCliente() {
 		return clienteFilter;
 	}
-
 	public void setCliente(Cliente cliente) {
 		this.clienteFilter = cliente;
 	}
@@ -144,7 +124,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	public Agendamento getAgendamento() {
 		return agendamento;
 	}
-
 	public void setAgendamento(Agendamento agendamento) {
 		this.agendamento = agendamento;
 	}
@@ -172,7 +151,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	public ItemMontagem getItemSelecionado() {
 		return itemSelecionado;
 	}
-
 	public void setItemSelecionado(ItemMontagem itemSelecionado) {
 		this.itemSelecionado = itemSelecionado;
 	}
@@ -186,12 +164,20 @@ public class CadastroAgendamentoBean implements Serializable {
 		
 		return nome;
 	}
-	
 	public void setNomeCliente(String nome) {
 	}
 	
+	public Date getDataAgendamentoSelecionada() {
+		return dataAgendamentoSelecionada;
+	}
+	public void setDataAgendamentoSelecionada(Date dataAgendamentoSelecionada) {
+		this.dataAgendamentoSelecionada = dataAgendamentoSelecionada;
+	}
+	
+	
 	// UTILS
 	
+
 	public boolean isEditando() {
 		return this.agendamento.getId() != null;
 	}
@@ -202,9 +188,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 
 	public void salvar() {
-
-		agendamento.getItens().forEach(i -> System.out.println(">> Item com Produto Persistido: " + i));
-		System.out.println(" >> Agendamento a salvar: " + agendamento);
 
 		if (agendamento.getItens().isEmpty()) {
 			FacesUtil.addWarningMessage("Informe pelo menos um item no agendamento!");

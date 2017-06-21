@@ -27,9 +27,15 @@
 
 		<p:outputLabel value="Data da Montagem" for="dataMontagem" />
 		<h:panelGroup>
-			<p:calendar id="dataMontagem" size="10" pattern="dd/MM/yyyy"
+			<p:calendar id="dataMontagem" size="15" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-4" locale="pt"
 				value="#{cadastroAgendamentoBean.agendamento.dataMontagem}" />
-			<p:button icon="ui-icon-search" title="Disponibilidade" />
+			<p:commandButton icon="ui-icon-search" title="Disponibilidade" process="@this"
+	        	update="@none"
+	        	action="#{disponibilidadeBean.abrirDialogo}"
+	        	ignoreAutoUpdate="true" >
+	        	<p:ajax event="dialogReturn" listener="#{cadastroAgendamentoBean.dataAgendamentoSelecionada}"
+				update="dataMontagem" ignoreAutoUpdate="true" />
+	        </p:commandButton>
 		</h:panelGroup>
 				
 		<p:outputLabel value="Cliente" for="cliente"/>
