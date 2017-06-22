@@ -26,6 +26,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import com.algaworks.pedidovenda.model.Agendamento;
 import com.algaworks.pedidovenda.model.Cliente;
+import com.algaworks.pedidovenda.model.NotaFiscal;
 import com.algaworks.pedidovenda.model.Usuario;
 import com.algaworks.pedidovenda.model.vo.DataQuantidade;
 import com.algaworks.pedidovenda.repository.filter.AgendamentoFilter;
@@ -213,6 +214,13 @@ public class Agendamentos implements Serializable {
 		List<Agendamento> results = query.getResultList();
 		
 		return results;
+	}
+
+	public List<NotaFiscal> buscarNotas(Agendamento agendamento) {
+		
+		return manager.createQuery("from NotaFiscal n where n.agendamento = :agendamento",NotaFiscal.class)
+				.setParameter("agendamento", agendamento)
+				.getResultList();
 	}
 
 }

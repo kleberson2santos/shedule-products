@@ -2,10 +2,12 @@ package com.algaworks.pedidovenda.service;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import com.algaworks.pedidovenda.model.Agendamento;
+import com.algaworks.pedidovenda.model.NotaFiscal;
 import com.algaworks.pedidovenda.model.StatusAgendamento;
 import com.algaworks.pedidovenda.repository.Agendamentos;
 import com.algaworks.pedidovenda.security.UsuarioLogado;
@@ -49,6 +51,12 @@ public class CadastroAgendamentoService implements Serializable{
 		
 		agendamento =  agendamentos.guardar(agendamento);
 		return agendamento;
+	}
+
+
+	public List<NotaFiscal> buscarSaidas(Agendamento agendamento) {
+		
+		return agendamentos.buscarNotas(agendamento);
 	}
 }	
 	//pedido.recalcularValorTotal();

@@ -41,7 +41,6 @@ public class Cliente implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -49,7 +48,6 @@ public class Cliente implements Serializable {
 	public Integer getCodigo() {
 		return codigo;
 	}
-
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
@@ -60,7 +58,6 @@ public class Cliente implements Serializable {
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -69,7 +66,6 @@ public class Cliente implements Serializable {
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -78,7 +74,6 @@ public class Cliente implements Serializable {
 	public String getDocumentoReceitaFederal() {
 		return documentoReceitaFederal;
 	}
-
 	public void setDocumentoReceitaFederal(String documentoReceitaFederal) {
 		this.documentoReceitaFederal = documentoReceitaFederal;
 	}
@@ -87,7 +82,6 @@ public class Cliente implements Serializable {
 	public String getTelefone() {
 		return telefone;
 	}
-
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
@@ -97,16 +91,14 @@ public class Cliente implements Serializable {
 	public TipoPessoa getTipo() {
 		return tipo;
 	}
-
 	public void setTipo(TipoPessoa tipo) {
 		this.tipo = tipo;
 	}
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	public List<Endereco> getEnderecos() {
 		return enderecos;
 	}
-
 	public void setEnderecos(List<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
@@ -115,7 +107,6 @@ public class Cliente implements Serializable {
 	public List<Agendamento> getAgendamentos() {
 		return agendamentos;
 	}
-
 	public void setAgendamentos(List<Agendamento> agendamentos) {
 		this.agendamentos = agendamentos;
 	}
@@ -144,8 +135,6 @@ public class Cliente implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 
 	@Override
 	public String toString() {
@@ -158,6 +147,5 @@ public class Cliente implements Serializable {
 	public boolean isNovo(){
 		return getId()==null;
 	}
-
 
 }

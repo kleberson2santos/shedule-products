@@ -23,6 +23,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import com.algaworks.pedidovenda.service.NegocioException;
+
 @Entity
 @Table(name = "agendamento")
 public class Agendamento implements Serializable {
@@ -114,7 +116,7 @@ public class Agendamento implements Serializable {
 		this.usuario = usuario;
 	}
 	
-	@OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	public List<NotaFiscal> getSaidas() {
 		return notasFiscais;
 	}
@@ -138,7 +140,14 @@ public class Agendamento implements Serializable {
 			return false;
 		return true;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 	
 	@Override
 	public String toString() {
@@ -147,8 +156,25 @@ public class Agendamento implements Serializable {
 				+ ", itens=" + itens + ", notasFiscais=" + notasFiscais + "]";
 	}
 	
-	
 	//UTILS
+	
+	@Transient
+	public void removerItens() {
+		this.itens.clear();		
+	}
+	
+	public void adicionarSaidas(List<NotaFiscal> notasSelecionadas) throws NegocioException {
+		if(notasSelecionadas!=null){
+			for (NotaFiscal notaFiscal : notasSelecionadas) {
+				notaFiscal.setAgendamento(this);
+			}
+		}else{
+			throw new NegocioException("A Lista de Saidas adicionadas não pode ser null ");
+		}
+		this.notasFiscais = new ArrayList<NotaFiscal>();
+		this.notasFiscais = notasSelecionadas;
+	}
+	
 	@Transient
 	public void adiciona(ItemMontagem item) {
 		this.itens.add(item);
@@ -160,30 +186,50 @@ public class Agendamento implements Serializable {
 		return getId()==null;
 	}
 	
+	
 	@Transient
 	public boolean isExistente(){
 		return !isNovo();
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+	@Transient
+	public boolean isAgendado() {
+		return StatusAgendamento.AGENDADO.equals(this.getStatus());
 	}
 	
 	@Transient
-	public void removerItens() {
-		this.itens.clear();		
+	public boolean isAlteravel() {
+		return this.isAgendado();
 	}
 	
-	public void adicionarSaidas(List<NotaFiscal> notasSelecionadas) {
-		for (NotaFiscal notaFiscal : notasSelecionadas) {
-			notaFiscal.setAgendamento(this);
-		}
-		this.notasFiscais = notasSelecionadas;
-		
+	@Transient
+	public boolean isNaoAlteravel() {
+		return !this.isAlteravel();
+	}
+	
+	@Transient
+	public boolean isNaoMontavel() {
+		return !this.isMontavel();
+	}
+
+	@Transient
+	public boolean isMontavel() {
+		return this.isExistente() && this.isAgendado();
+	}
+	
+	@Transient
+	public boolean isNaoCancelavel() {
+		return !this.isCancelavel();
+	}
+	
+	@Transient
+	public boolean isCancelavel() {
+		return this.isExistente() && !this.isCancelado();
+	}
+	
+	@Transient
+	private boolean isCancelado() {
+		return StatusAgendamento.CANCELADO.equals(this.getStatus());
 	}
 
 }

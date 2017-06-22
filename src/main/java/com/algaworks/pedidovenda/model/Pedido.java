@@ -178,16 +178,6 @@ public class Pedido implements Serializable {
 		this.itens = itens;
 	}
 
-	@Transient
-	public boolean isNovo() {
-		return getId() == null;
-	}
-	
-	@Transient
-	public boolean isExistente() {
-		return !isNovo();
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -211,6 +201,16 @@ public class Pedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	@Transient
+	public boolean isNovo() {
+		return getId() == null;
+	}
+	
+	@Transient
+	public boolean isExistente() {
+		return !isNovo();
 	}
 
 	@Transient

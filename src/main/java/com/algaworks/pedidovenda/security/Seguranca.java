@@ -48,9 +48,19 @@ public class Seguranca {
 				|| externalContext.isUserInRole("VENDEDORES");
 	}
 	
+	public boolean isMontarAgendamentoPermitido() {
+		return externalContext.isUserInRole("ADMINISTRADORES") 
+				|| externalContext.isUserInRole("MONTADORES");
+	}
+	
 	public boolean isCancelarPedidoPermitido() {
 		return externalContext.isUserInRole("ADMINISTRADORES") 
 				|| externalContext.isUserInRole("VENDEDORES");
+	}
+	
+	public boolean isCancelarAgendamentoPermitido() {
+		return externalContext.isUserInRole("ADMINISTRADORES") 
+				|| externalContext.isUserInRole("MONTADORES");
 	}
 	
 }

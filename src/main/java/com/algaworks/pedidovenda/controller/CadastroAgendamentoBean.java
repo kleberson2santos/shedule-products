@@ -56,7 +56,7 @@ public class CadastroAgendamentoBean implements Serializable {
 		if (this.agendamento == null) {
 			limpar();
 		}else{
-			setSaidasSelecionadas(agendamento.getSaidas());			
+			setSaidasSelecionadas(agendamento.getSaidas());	
 		}
 	}
 
@@ -81,6 +81,7 @@ public class CadastroAgendamentoBean implements Serializable {
 	}
 
 	private void atualizarSaidas() {
+		System.out.println("ATUALIZAR SAIDAS");
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
 		List<NotaFiscal> saidasAgendadas = clientes.buscarSaidasSistema(clienteFilter);
@@ -187,8 +188,18 @@ public class CadastroAgendamentoBean implements Serializable {
 	}
 	
 
-	public void salvar() {
+	public void salvar() throws NegocioException {
+		System.out.println(">>>>> S A L V A R <<<<<<");
+		System.out.println(" saidasFirebird esta vazio? "+this.saidasFirebird.isEmpty());
+		saidasFirebird.forEach(i -> System.out.println("[SaidaFirebird]-" + i));
+		System.out.println(" saidascodigo esta vazio? "+this.saidasCodigos.isEmpty());
+		saidasCodigos.forEach(i -> System.out.println("[SaidaCodigo]-" + i));
+		
+		if(!agendamento.isNovo()){
+			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);
+		}
 
+		
 		if (agendamento.getItens().isEmpty()) {
 			FacesUtil.addWarningMessage("Informe pelo menos um item no agendamento!");
 		} else {

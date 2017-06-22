@@ -110,6 +110,7 @@ public class DisponibilidadeBean implements Serializable {
      
     public void onDateSelect(SelectEvent selectEvent) {
         System.out.println("DATA SELECIONADA - "+ (Date) selectEvent.getObject());
+        selecionar((Date) selectEvent.getObject());
     }
 
 

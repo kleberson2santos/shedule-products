@@ -24,7 +24,7 @@
 			<AppenderRef ref="console" />
 			<AppenderRef ref="arquivo" />
 		</Root>
-        <Logger name="org.hibernate.SQL" level="debug"/>
+        <Logger name="org.hibernate.SQL" level="info"/>
 	</Loggers>
 	
 </Configuration>
