@@ -36,19 +36,19 @@
 	    		
 	    		<p:outputLabel value="Data de criação" />
 	    		<h:panelGroup>
-	    			<p:calendar size="10" pattern="dd/MM/yyyy" 
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" timeZone="GMT-4"
 	    				value="#{pesquisaAgendamentosBean.filtro.dataCriacaoDe}" />
 	    			a
-	    			<p:calendar size="10" pattern="dd/MM/yyyy"
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" timeZone="GMT-4"
 	    				value="#{pesquisaAgendamentosBean.filtro.dataCriacaoAte}" />
 	    		</h:panelGroup>
 	    		
 	    		<p:outputLabel value="Data da montagem" />
 	    		<h:panelGroup>
-	    			<p:calendar size="10" pattern="dd/MM/yyyy" 
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" timeZone="GMT-4"
 	    				value="#{pesquisaAgendamentosBean.filtro.dataMontagemDe}" />
 	    			a
-	    			<p:calendar size="10" pattern="dd/MM/yyyy"
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" timeZone="GMT-4"
 	    				value="#{pesquisaAgendamentosBean.filtro.dataMontagemAte}" />
 	    		</h:panelGroup>
 	    		
@@ -80,7 +80,7 @@
 	    		</p:column>
 	    		<p:column headerText="Data da montagem" style="text-align: center; width: 140px">
 	    			<h:outputText value="#{agendamento.dataMontagem}">
-	    				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+	    				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt" timeZone="GMT-4"/>
 	    			</h:outputText>
 	    		</p:column>
 	    		<p:column headerText="Status" style="width: 100px">

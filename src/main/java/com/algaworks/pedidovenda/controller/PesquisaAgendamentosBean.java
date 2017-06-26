@@ -1,6 +1,8 @@
 package com.algaworks.pedidovenda.controller;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +51,12 @@ public class PesquisaAgendamentosBean implements Serializable {
 				filtro.setQuantidadeRegistros(pageSize);
 				filtro.setPropriedadeOrdenacao(sortField);
 				filtro.setAscendente(SortOrder.ASCENDING.equals(sortOrder));
-				
+				if(filtro.getDataCriacaoAte()!=null){
+					filtro.setDataCriacaoAte(limitaAte(filtro.getDataCriacaoAte()));
+				}
+				if(filtro.getDataMontagemAte()!=null){
+					filtro.setDataMontagemAte(limitaAte(filtro.getDataMontagemAte()));
+				}
 				setRowCount(agendamentos.quantidadeFiltrados(filtro));
 				
 				return agendamentos.filtrados(filtro);
@@ -57,6 +64,15 @@ public class PesquisaAgendamentosBean implements Serializable {
 			
 		};
 	}
+	
+	private Date limitaAte(Date base) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(base);
+        date.set(Calendar.HOUR, 23); 
+        date.set(Calendar.MINUTE, 59);
+         
+        return date.getTime();
+    }
 
 	public void posProcessarXls(Object documento) {
 		HSSFWorkbook planilha = (HSSFWorkbook) documento;

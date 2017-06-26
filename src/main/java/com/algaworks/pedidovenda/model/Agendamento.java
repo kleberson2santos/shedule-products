@@ -2,6 +2,7 @@ package com.algaworks.pedidovenda.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class Agendamento implements Serializable {
 		return dataMontagem;
 	}
 	public void setDataMontagem(Date dataMontagem) {
-		this.dataMontagem = dataMontagem;
+		this.dataMontagem = horaDefault(dataMontagem);
 	}
 	
 	@NotNull
@@ -231,5 +232,14 @@ public class Agendamento implements Serializable {
 	private boolean isCancelado() {
 		return StatusAgendamento.CANCELADO.equals(this.getStatus());
 	}
+	
+	@Transient
+	private Date horaDefault(Date base) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(base);
+        date.set(Calendar.HOUR_OF_DAY, 9);
+         
+        return date.getTime();
+    }
 
 }

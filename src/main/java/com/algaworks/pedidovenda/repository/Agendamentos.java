@@ -74,6 +74,7 @@ public class Agendamentos implements Serializable {
 		}
 		
 		if (filtro.getDataMontagemAte() != null) {
+			System.out.println(">>FILTRO MODIFICADO: DATA MONTAGEM ATE:"+filtro.getDataMontagemAte());
 			predicates.add(builder.lessThanOrEqualTo(agendamentoRoot.get("dataMontagem"), filtro.getDataMontagemAte()));
 		}
 		
