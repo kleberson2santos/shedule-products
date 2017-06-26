@@ -23,24 +23,6 @@ public class CadastroAgendamentoService implements Serializable{
 	
 	@Inject
 	private Agendamentos agendamentos;
-
-	
-//	@Transactional
-//	public Cliente salvarClienteFirebird(Cliente cliente)throws NegocioException{
-//		Cliente clienteExistente = new Cliente();
-//		if(cliente.isNovo()){
-//			
-//			clienteExistente = clientes.getClienteExistenteFirebird(cliente);
-//		}
-//		
-//		if (clienteExistente != null && !clienteExistente.equals(cliente)) {
-//			throw new NegocioException("Já existe um cliente com o Cpf informado.");
-//		}
-//		
-//		cliente.setTipo(TipoPessoa.FISICA);
-//		cliente =  clientes.guardarCliente(cliente);
-//		return cliente;
-//	}
 	
 	public Agendamento salvar(Agendamento agendamento){
 		if (agendamento.isNovo()) {
@@ -59,16 +41,5 @@ public class CadastroAgendamentoService implements Serializable{
 		return agendamentos.buscarNotas(agendamento);
 	}
 }	
-	//pedido.recalcularValorTotal();
-	
-//	if (pedido.isNaoAlteravel()) {
-//		throw new NegocioException("Pedido não pode ser alterado no status "
-//				+ pedido.getStatus().getDescricao() + ".");
-//	}
-//	
-//	
-//	if (pedido.isValorTotalNegativo()) {
-//		throw new NegocioException("Valor total do pedido não pode ser negativo.");
-//	}
-//	
+
 

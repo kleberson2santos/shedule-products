@@ -41,12 +41,7 @@ public class Agendamentos implements Serializable {
 
 	@Transactional
 	public Agendamento guardar(Agendamento agendamento) {
-		Agendamento agendamentoTeste = new Agendamento();
-		System.out.println("GUARDAR O AGENDAMENTO: ");
-		agendamentoTeste =  manager.merge(agendamento);
-		System.out.println("APOS guardar o agendamento: " +agendamentoTeste);
-		
-		return agendamentoTeste;
+		return manager.merge(agendamento);
 	}
 	
 	private List<Predicate> criarPredicatesParaFiltro(AgendamentoFilter filtro, Root<Agendamento> agendamentoRoot, 
@@ -74,7 +69,6 @@ public class Agendamentos implements Serializable {
 		}
 		
 		if (filtro.getDataMontagemAte() != null) {
-			System.out.println(">>FILTRO MODIFICADO: DATA MONTAGEM ATE:"+filtro.getDataMontagemAte());
 			predicates.add(builder.lessThanOrEqualTo(agendamentoRoot.get("dataMontagem"), filtro.getDataMontagemAte()));
 		}
 		
@@ -218,7 +212,6 @@ public class Agendamentos implements Serializable {
 	}
 
 	public List<NotaFiscal> buscarNotas(Agendamento agendamento) {
-		
 		return manager.createQuery("from NotaFiscal n where n.agendamento = :agendamento",NotaFiscal.class)
 				.setParameter("agendamento", agendamento)
 				.getResultList();

@@ -81,11 +81,8 @@ public class CadastroAgendamentoBean implements Serializable {
 	}
 
 	private void atualizarSaidas() {
-		System.out.println("ATUALIZAR SAIDAS");
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
-		List<NotaFiscal> saidasAgendadas = clientes.buscarSaidasSistema(clienteFilter);
-		System.out.println(saidasAgendadas);
 		saidasFirebird = clientes.buscarSaidasPorCliente(this.clienteFilter);
 		this.agendamento.setSaidas(saidasFirebird);
 	}
@@ -189,11 +186,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 
 	public void salvar() throws NegocioException {
-		System.out.println(">>>>> S A L V A R <<<<<<");
-		System.out.println(" saidasFirebird esta vazio? "+this.saidasFirebird.isEmpty());
-		saidasFirebird.forEach(i -> System.out.println("[SaidaFirebird]-" + i));
-		System.out.println(" saidascodigo esta vazio? "+this.saidasCodigos.isEmpty());
-		saidasCodigos.forEach(i -> System.out.println("[SaidaCodigo]-" + i));
 		
 		if(!agendamento.isNovo()){
 			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);

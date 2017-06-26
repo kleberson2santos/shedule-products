@@ -21,7 +21,7 @@
 							fileName="agendamentos" postProcessor="#{pesquisaAgendamentosBean.posProcessarXls}" />
 					</p:commandButton>
 					
-	    			<p:button value="Novo" outcome="/pedidos/CadastroAgendamento" />
+	    			<p:button value="Novo" outcome="/agendamentos/CadastroAgendamento" />
 	    		</p:toolbarGroup>
 	    	</p:toolbar>
 	    	
@@ -87,7 +87,7 @@
 	    			<h:outputText value="#{agendamento.status.descricao}"/>
 	    		</p:column>
 	    		<p:column style="text-align: center; width: 50px" exportable="false">
-	    			<p:button icon="ui-icon-pencil" title="Editar" outcome="/pedidos/CadastroAgendamento">
+	    			<p:button icon="ui-icon-pencil" title="Editar" outcome="/agendamentos/CadastroAgendamento">
 	    				<f:param name="agendamento" value="#{agendamento.id}" />
 	    			</p:button>
 	    		</p:column>

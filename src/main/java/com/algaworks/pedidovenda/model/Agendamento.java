@@ -88,7 +88,12 @@ public class Agendamento implements Serializable {
 		return dataMontagem;
 	}
 	public void setDataMontagem(Date dataMontagem) {
-		this.dataMontagem = horaDefault(dataMontagem);
+		if(isNovo()){
+			this.dataMontagem = horaDefault(dataMontagem);
+		}else{
+			this.dataMontagem = dataMontagem;
+		}
+		
 	}
 	
 	@NotNull

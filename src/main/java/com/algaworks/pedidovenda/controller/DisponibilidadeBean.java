@@ -20,7 +20,6 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import com.algaworks.pedidovenda.model.Agendamento;
-import com.algaworks.pedidovenda.model.Cliente;
 import com.algaworks.pedidovenda.repository.Agendamentos;
 
 @Named
@@ -104,12 +103,10 @@ public class DisponibilidadeBean implements Serializable {
      
     public void onEventSelect(SelectEvent selectEvent) {
         event = (ScheduleEvent) selectEvent.getObject();
-        System.out.println("EVENTO SELECIONADO - ");
         System.out.println(" > "+(ScheduleEvent)selectEvent.getObject());
     }
      
     public void onDateSelect(SelectEvent selectEvent) {
-        System.out.println("DATA SELECIONADA - "+ (Date) selectEvent.getObject());
         selecionar((Date) selectEvent.getObject());
     }
 

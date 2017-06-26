@@ -67,22 +67,14 @@
 				<h:form style="display: inline-block">
 					<p:menubar styleClass="menu-sistema">
 						<p:submenu label="Cadastros">
-							<p:menuitem value="Clientes" />
 							<p:menuitem value="Usuários" outcome="/usuarios/PesquisaUsuarios"/>
-							<p:separator/>
-							<p:menuitem value="Categorias" />
-							<p:menuitem value="Produtos" outcome="/produtos/PesquisaProdutos" />
-						</p:submenu>
-						<p:submenu label="Pedidos">
-							<p:menuitem value="Novo pedido" outcome="/pedidos/CadastroPedido" />
-							<p:menuitem value="Pesquisa" outcome="/pedidos/PesquisaPedidos" />
 						</p:submenu>
 						<p:submenu label="Montagens">
-							<p:menuitem value="Novo agendamento" outcome="/pedidos/CadastroAgendamento" />
-							<p:menuitem value="Pesquisa" outcome = "/pedidos/PesquisaAgendamentos"/>
+							<p:menuitem value="Novo agendamento" outcome="/agendamentos/CadastroAgendamento" />
+							<p:menuitem value="Pesquisa" outcome = "/agendamentos/PesquisaAgendamentos"/>
 						</p:submenu>
 						<p:submenu label="Relatórios">
-							<p:menuitem value="Pedidos emitidos" outcome="/relatorios/RelatorioPedidosEmitidos" />
+							<p:menuitem value="Montagens agendadas" outcome="/relatorios/RelatorioMontagensAgendadas" />
 						</p:submenu>
 						<p:menuitem value="Sair" url="/logout" />
 					</p:menubar>
@@ -98,8 +90,8 @@
 		<p:separator style="margin-top: 20px"/>
 		
 		<footer>
-			Curso Online de Sistemas Comerciais Java EE com CDI, JPA e PrimeFaces -
-			<a href="http://bit.ly/Y8saFl" target="_blank">www.algaworks.com</a>
+			Sistema de Agendamento de Montagens - 
+			<a href="http://bit.ly/Y8saFl" target="_blank">Lojas Bokiné</a>
 		</footer>
 		
 		<script>

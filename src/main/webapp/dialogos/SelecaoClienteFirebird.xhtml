@@ -30,11 +30,11 @@
 	<p:panelGrid id = "clienteFirebird" columns="2" styleClass="grid-cliente-firebird ">
 		<p:outputLabel value="Cpf" for="cpf"/>
 		<p:autoComplete id="cpf" size="14" dropdown="true" maxResults="4" queryDelay="300" forceSelection="true" minQueryLength="3"
-			value="#{selecaoClienteFirebirdBean.cpf}" completeMethod="#{selecaoClienteFirebirdBean.completarCpf}" >	
+			value="#{selecaoClienteFirebirdBean.cpf}" completeMethod="#{selecaoClienteFirebirdBean.completarCpf}" required="true">	
 			<p:ajax event="itemSelect" process="@this" listener="#{selecaoClienteFirebirdBean.atualizarCliente}" update="nome "/>
 		</p:autoComplete>
     	<p:outputLabel value="Nome" for="nome" />
-		<p:autoComplete id="nome" size="50" dropdown="true" maxResults="4" queryDelay="300" forceSelection="true" required="true"
+		<p:autoComplete id="nome" size="50" dropdown="true" maxResults="4" queryDelay="300" forceSelection="true"
 			value="#{selecaoClienteFirebirdBean.nome}" completeMethod="#{selecaoClienteFirebirdBean.completarNome}" minQueryLength="3">
 			<p:ajax event="itemSelect" process="@this" listener="#{selecaoClienteFirebirdBean.atualizarCliente}" update="cpf "/>
 		</p:autoComplete>

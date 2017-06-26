@@ -45,7 +45,7 @@ public class Seguranca {
 	
 	public boolean isEmitirPedidoPermitido() {
 		return externalContext.isUserInRole("ADMINISTRADORES") 
-				|| externalContext.isUserInRole("VENDEDORES");
+				|| externalContext.isUserInRole("MONTADORES");
 	}
 	
 	public boolean isMontarAgendamentoPermitido() {
@@ -55,7 +55,7 @@ public class Seguranca {
 	
 	public boolean isCancelarPedidoPermitido() {
 		return externalContext.isUserInRole("ADMINISTRADORES") 
-				|| externalContext.isUserInRole("VENDEDORES");
+				|| externalContext.isUserInRole("MONTADORES");
 	}
 	
 	public boolean isCancelarAgendamentoPermitido() {

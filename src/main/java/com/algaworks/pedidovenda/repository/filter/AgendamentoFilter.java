@@ -68,7 +68,6 @@ public class AgendamentoFilter implements Serializable {
 	}
 
 	public void setDataMontagemAte(Date dataMontagemAte) {
-		System.out.println("GET DATA CRIACAO ATE: "+dataMontagemAte);
 		this.dataMontagemAte = dataMontagemAte;
 	}
 

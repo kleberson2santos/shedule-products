@@ -6,9 +6,9 @@
 
   	<p:toolbar style="margin-top: 20px">
 		<p:toolbarGroup>
-			<p:button value="Novo" outcome="/pedidos/CadastroAgendamento"/>
+			<p:button value="Novo" outcome="/agendamentos/CadastroAgendamento"/>
 			<p:commandButton value="Salvar" action="#{cadastroAgendamentoBean.salvar}" 
-				update="@form" disabled="#{cadastroPedidoBean.pedido.naoAlteravel}"/>
+				update="@form" disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 		</p:toolbarGroup>
 		
 		<p:toolbarGroup align="right">
@@ -18,11 +18,12 @@
 			<p:commandButton value="Cancelar" action="#{cancelamentoAgendamentoBean.cancelarAgendamento}"
   				process="@this" update="@form"
   				disabled="#{cadastroAgendamentoBean.agendamento.naoCancelavel or not seguranca.cancelarAgendamentoPermitido}" />
-			<p:button value="Enviar por E-mail" />
+			<p:button value="Enviar por E-mail" 
+				disabled="#{cadastroAgendamentoBean.agendamento.naoCancelavel or not seguranca.cancelarAgendamentoPermitido}"/>
 			
 			<p:separator />
 			
-			<p:button value="Pesquisa" outcome="/pedidos/PesquisaAgendamentos" />
+			<p:button value="Pesquisa" outcome="/agendamentos/PesquisaAgendamentos" />
 		</p:toolbarGroup>
 	</p:toolbar>
   	
