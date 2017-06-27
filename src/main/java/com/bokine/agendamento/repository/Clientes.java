@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.bokine.agendamento.model.Agendamento;
 import com.bokine.agendamento.model.Categoria;
 import com.bokine.agendamento.model.Cliente;
+import com.bokine.agendamento.model.Endereco;
 import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.model.Produto;
@@ -59,7 +60,10 @@ public class Clientes implements Serializable {
 		nomes.clear();
 		cpfs.clear();
 		Query q = managerCorporativo
-				.createNativeQuery("select c.nome,c.cpf from clientes c where upper(c.NOME) like :nome and c.cpf is not null")
+				.createNativeQuery("select distinct c.nome,c.cpf from CLIENTES c "
+						+ "inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR "
+						+ "inner join SAIDAS s on s.CLIENTE=c.CLIENTE  "
+						+ "where c.CLIENTE NOT IN (31) and s.EVENTO in (10,30) and c.cpf is not null and upper(c.NOME) like :nome ")
 				.setParameter("nome", parametro.toUpperCase() + "%");
 		@SuppressWarnings("unchecked")
 		Collection<Object[]> results = q.getResultList();
@@ -85,7 +89,10 @@ public class Clientes implements Serializable {
 				parametro = inserirCaracteresDoCPF(parametro);
 			}
 			Query q = managerCorporativo
-					.createNativeQuery("select c.nome,c.cpf from clientes c where c.cpf is not null and c.cpf like :cpf ")
+					.createNativeQuery("select distinct c.nome,c.cpf from CLIENTES c "
+							+ "inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR "
+							+ "inner join SAIDAS s on s.CLIENTE=c.CLIENTE  "
+							+ "where c.CLIENTE NOT IN (31) and s.EVENTO in (10,30) and c.cpf like :cpf ")
 					.setParameter("cpf", parametro+"%");
 			@SuppressWarnings("unchecked")
 			Collection<Object[]> results = q.getResultList();
@@ -254,9 +261,14 @@ public class Clientes implements Serializable {
 		}
 	
 	public Cliente buscaClienteFirebird(Cliente cliente) {
+		System.out.println("BUSCANDO NO BANCO DE DADOS FIREBIRD"+ cliente);
 		Cliente clienteAux = new Cliente();
 		if(cliente.getDocumentoReceitaFederal() != null ){
-			Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente from clientes c where c.cpf = ?1 ");
+			Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente,"
+					+ " e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
+					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
+					+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
+					+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and c.cpf = ?1");
 			q.setParameter(1, cliente.getDocumentoReceitaFederal());
 			@SuppressWarnings("unchecked")
 			Collection<Object[]> results = q.getResultList();
@@ -272,10 +284,16 @@ public class Clientes implements Serializable {
 					clienteAux.setTelefone((String) elements[3]);
 					
 					clienteAux.setCodigo((Integer) elements[4]);
+					
+					clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
+							(String) elements[8], (String) elements[9]));
 			}         
 		}else{
 			if(cliente.getNome()!=null){
-				Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail , c.cel, c.cliente from clientes c where c.nome like :nome")
+				Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail , c.cel, c.cliente, e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
+					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
+					+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
+					+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and  c.nome like :nome")
 				.setParameter("nome", cliente.getNome()+"%");
 				@SuppressWarnings("unchecked")
 				Collection<Object[]> results = q.getResultList();
@@ -291,10 +309,16 @@ public class Clientes implements Serializable {
 						clienteAux.setTelefone((String) elements[3]);
 						
 						clienteAux.setCodigo((Integer) elements[4]);
+						
+						clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
+								(String) elements[8], (String) elements[9]));
 				}         
 			}else{
 				if(cliente.getEmail()!=null){
-					Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente from clientes c where c.e_mail = ?1 ");
+					Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente, e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
+							+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
+							+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
+							+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and c.e_mail = ?1 ");
 					q.setParameter(1, cliente.getEmail());
 					@SuppressWarnings("unchecked")
 					Collection<Object[]> results = q.getResultList();
@@ -310,23 +334,24 @@ public class Clientes implements Serializable {
 							clienteAux.setTelefone((String) elements[3]);
 							
 							clienteAux.setCodigo((Integer) elements[4]);
+							
+							clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
+									(String) elements[8], (String) elements[9]));
 					}         
 				}
 			}
 		}    
 		return clienteAux;
 	}
-
-//	public Cliente getFindClientExistent(Cliente cliente){
-//		return manager.find(Cliente.class, cliente.getId());
-//		
-//	}
 	
 	public Cliente porId(Long id) {
 		return this.manager.find(Cliente.class, id);
 	}
 	
 	public Cliente porCpf(String cpf){
+		if(cpf==null){
+			System.err.println("O CPF TA NULL");
+		}
 		try{
 			return this.manager.createQuery("from Cliente where upper(documentoReceitaFederal) like :cpf", Cliente.class)
 					.setParameter("cpf", cpf.toUpperCase() + "%").getSingleResult();
@@ -335,6 +360,9 @@ public class Clientes implements Serializable {
 		return null;
 	}
 	public Cliente porNome(String nome){
+		if(nome==null){
+			System.err.println("O NOME TA NULL");
+		}
 		try{
 			return this.manager.createQuery("from Cliente where upper(nome) like :nome", Cliente.class)
 					.setParameter("nome", nome.toUpperCase() + "%").getSingleResult();

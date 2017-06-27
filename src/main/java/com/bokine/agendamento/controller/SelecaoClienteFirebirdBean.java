@@ -30,8 +30,8 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 	
 	private Cliente cliente;
 	
-	private String nome;
-	private String cpf;
+	private String nome= new String();
+	private String cpf = new String();
 
 
 	public void selecionar() {
@@ -80,10 +80,7 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 		this.cliente.setNome(this.nome);
 		this.cliente.setDocumentoReceitaFederal(this.cpf);
 		
-		
-		System.out.println("BUSCAR CLIENTE ...");
 		cliente = cadastroClienteService.buscaCliente(cliente);
-		System.out.println("RETORNOU DOS BANCOS: "+cliente);
 		nome = cliente.getNome();
 		cpf = cliente.getDocumentoReceitaFederal();
 		

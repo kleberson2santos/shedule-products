@@ -21,6 +21,10 @@ public class CadastroClienteService implements Serializable {
 		Cliente cliente = new Cliente();
 		
 			//SE TIVER CPF PROCURA NO MYSQL
+		
+			// BUSCAR SEMPRE NO FIREBIRD
+		
+		
 			if(clienteFilter.getDocumentoReceitaFederal() != null ){
 		
 				cliente = clientes.porCpf(clienteFilter.getDocumentoReceitaFederal());
@@ -44,6 +48,7 @@ public class CadastroClienteService implements Serializable {
 	private Cliente buscaClienteESalvaFirebird(Cliente cliente){
 		Cliente clienteAux =  new Cliente();
 		clienteAux = clientes.buscaClienteFirebird(cliente);
+		System.out.println("RETORNOU"+ clienteAux);
 
 		if(clienteAux!=null){
 			Cliente temp = new Cliente();

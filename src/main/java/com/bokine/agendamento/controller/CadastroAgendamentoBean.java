@@ -16,6 +16,7 @@ import org.primefaces.event.SelectEvent;
 
 import com.bokine.agendamento.model.Agendamento;
 import com.bokine.agendamento.model.Cliente;
+import com.bokine.agendamento.model.Endereco;
 import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.repository.Clientes;
@@ -68,6 +69,7 @@ public class CadastroAgendamentoBean implements Serializable {
 		notasSelecionadas = new ArrayList<NotaFiscal>();
 		saidasCodigos = new ArrayList<Integer>();
 		agendamento.getItens().clear();
+		clienteFilter.setEndereco(new Endereco());
 	}
 
 	public void clienteSelecionado(SelectEvent event){

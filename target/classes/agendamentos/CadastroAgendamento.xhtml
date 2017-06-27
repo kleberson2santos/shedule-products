@@ -24,6 +24,15 @@
 			<ui:include src="/WEB-INF/template/agendamentos/CapaMontagem.xhtml" />			
 			
  			<ui:include src="/WEB-INF/template/agendamentos/ItensMontagem.xhtml" />
+ 			
+ 			<p:tabView id="info" style="margin-top: 20px">
+	    		<p:tab title="Endereço">
+	    			<ui:include src="/WEB-INF/template/agendamentos/EnderecoMontagem.xhtml" />
+	    		</p:tab>
+	    		<p:tab title="Observação">
+	    			<ui:include src="/WEB-INF/template/agendamentos/ObservacaoMontagem.xhtml" />
+	    		</p:tab>
+			</p:tabView>
 			
 <!-- 			<ui:include src="/WEB-INF/template/montagens/ObservacaoMontagem.xhtml" /> -->
 

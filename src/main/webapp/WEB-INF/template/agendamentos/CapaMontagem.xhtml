@@ -48,7 +48,7 @@
 	        	action="#{selecaoClienteFirebirdBean.abrirDialogo}"
 	        	ignoreAutoUpdate="true" rendered="#{not cadastroAgendamentoBean.editando}">
 	        	<p:ajax event="dialogReturn" listener="#{cadastroAgendamentoBean.clienteSelecionado}"
-				update="cliente notas" ignoreAutoUpdate="true" />
+				update="cliente notas :frmCadastro:info" ignoreAutoUpdate="true" />
 	        </p:commandButton>
         </h:panelGroup>		
 		
@@ -58,7 +58,7 @@
 		value="#{cadastroAgendamentoBean.agendamento.saidas}"
 		selection="#{cadastroAgendamentoBean.saidasSelecionadas}"
 		rowKey="#{saida.saida}"
-		style="margin-bottom:0" rendered="#{not cadastroAgendamentoBean.editando}" 
+		style="margin-bottom:0;width:300px;" rendered="#{not cadastroAgendamentoBean.editando}" 
 		process="@this">
 		
 		<p:column selectionMode="multiple"

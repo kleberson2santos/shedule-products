@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +32,8 @@ public class Cliente implements Serializable {
 	private String documentoReceitaFederal;
 	private String telefone;
 	private TipoPessoa tipo;
-	private List<Endereco> enderecos = new ArrayList<>();
+	private Endereco endereco;
+
 	private List<Agendamento> agendamentos = new ArrayList<>();
 
 	@Id
@@ -95,13 +95,6 @@ public class Cliente implements Serializable {
 		this.tipo = tipo;
 	}
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	public List<Endereco> getEnderecos() {
-		return enderecos;
-	}
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
-	}
 	
 	@OneToMany(mappedBy="cliente")
 	public List<Agendamento> getAgendamentos() {
@@ -110,6 +103,15 @@ public class Cliente implements Serializable {
 	public void setAgendamentos(List<Agendamento> agendamentos) {
 		this.agendamentos = agendamentos;
 	}
+
+	@Embedded
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+}
 
 	@Override
 	public int hashCode() {
@@ -140,7 +142,7 @@ public class Cliente implements Serializable {
 	public String toString() {
 		return "Cliente [id=" + id + ", codigo=" + codigo + ", nome=" + nome + ", email=" + email
 				+ ", documentoReceitaFederal=" + documentoReceitaFederal + ", telefone=" + telefone + ", tipo=" + tipo
-				+ ", enderecos=" + enderecos + "]";
+				+ ", endereco=" + endereco + "]";
 	}
 
 	@Transient
