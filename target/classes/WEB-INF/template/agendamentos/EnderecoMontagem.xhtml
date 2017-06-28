@@ -8,23 +8,23 @@
 	
         <p:outputLabel value="Logradouro" for="Logradouro" />
         <p:inputText id="Logradouro" size="50" 
-        	value="#{cadastroAgendamentoBean.agendamento.cliente.endereco.logradouro}" 
+        	value="#{cadastroAgendamentoBean.cliente.endereco.logradouro}" 
         	disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}" />
 
         <p:outputLabel value="Complemento" for="Complemento" />
-        <p:inputText id="Complemento" size="50" value="#{cadastroAgendamentoBean.agendamento.cliente.endereco.complemento}" 
+        <p:inputText id="Complemento" size="50" value="#{cadastroAgendamentoBean.cliente.endereco.complemento}" 
         	disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 
         <p:outputLabel value="Cidade" for="Cidade" />
-        <p:inputText id="Cidade" size="20" value="#{cadastroAgendamentoBean.agendamento.cliente.endereco.cidade}" 
+        <p:inputText id="Cidade" size="20" value="#{cadastroAgendamentoBean.cliente.endereco.cidade}" 
         	disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 
         <p:outputLabel value="Estado" for="Estado" />
-        <p:inputText id="Estado" size="20" value="#{cadastroAgendamentoBean.agendamento.cliente.endereco.uf}" 
+        <p:inputText id="Estado" size="20" value="#{cadastroAgendamentoBean.cliente.endereco.uf}" 
         	disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 
         <p:outputLabel value="CEP" for="Cep" />
-        <p:inputText id="Cep" size="10" value="#{cadastroAgendamentoBean.agendamento.cliente.endereco.cep}" 
+        <p:inputText id="Cep" size="10" value="#{cadastroAgendamentoBean.cliente.endereco.cep}" 
         	disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 	</p:panelGrid>
   	

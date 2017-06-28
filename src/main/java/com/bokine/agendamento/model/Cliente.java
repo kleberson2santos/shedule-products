@@ -104,6 +104,7 @@ public class Cliente implements Serializable {
 		this.agendamentos = agendamentos;
 	}
 
+	
 	@Embedded
 	public Endereco getEndereco() {
 		return endereco;
@@ -142,9 +143,8 @@ public class Cliente implements Serializable {
 	public String toString() {
 		return "Cliente [id=" + id + ", codigo=" + codigo + ", nome=" + nome + ", email=" + email
 				+ ", documentoReceitaFederal=" + documentoReceitaFederal + ", telefone=" + telefone + ", tipo=" + tipo
-				+ ", endereco=" + endereco + "]";
+				+ ", endereco=" + endereco + ", agendamentos=" + agendamentos + "]";
 	}
-
 	@Transient
 	public boolean isNovo(){
 		return getId()==null;

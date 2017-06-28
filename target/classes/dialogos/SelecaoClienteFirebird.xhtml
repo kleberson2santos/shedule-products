@@ -35,7 +35,7 @@
 		</p:autoComplete>
     	<p:outputLabel value="Nome" for="nome" />
 		<p:autoComplete id="nome" size="50" dropdown="true" maxResults="4" queryDelay="300" forceSelection="true"
-			value="#{selecaoClienteFirebirdBean.nome}" completeMethod="#{selecaoClienteFirebirdBean.completarNome}" minQueryLength="3">
+			value="#{selecaoClienteFirebirdBean.nome}" completeMethod="#{selecaoClienteFirebirdBean.completarNome}">
 			<p:ajax event="itemSelect" process="@this" listener="#{selecaoClienteFirebirdBean.atualizarCliente}" update="cpf "/>
 		</p:autoComplete>
 		<p:outputLabel />

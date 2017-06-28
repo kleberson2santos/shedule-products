@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -263,7 +262,7 @@ public class Clientes implements Serializable {
 	public Cliente buscaClienteFirebird(Cliente cliente) {
 		System.out.println("BUSCANDO NO BANCO DE DADOS FIREBIRD"+ cliente);
 		Cliente clienteAux = new Cliente();
-		if(cliente.getDocumentoReceitaFederal() != null ){
+		if(!cliente.getDocumentoReceitaFederal().isEmpty() ){
 			Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente,"
 					+ " e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
 					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
@@ -289,7 +288,7 @@ public class Clientes implements Serializable {
 							(String) elements[8], (String) elements[9]));
 			}         
 		}else{
-			if(cliente.getNome()!=null){
+			if(!cliente.getNome().isEmpty()){
 				Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail , c.cel, c.cliente, e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
 					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
 					+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
@@ -313,32 +312,6 @@ public class Clientes implements Serializable {
 						clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
 								(String) elements[8], (String) elements[9]));
 				}         
-			}else{
-				if(cliente.getEmail()!=null){
-					Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente, e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
-							+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
-							+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
-							+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and c.e_mail = ?1 ");
-					q.setParameter(1, cliente.getEmail());
-					@SuppressWarnings("unchecked")
-					Collection<Object[]> results = q.getResultList();
-					Iterator<Object[]> ite = results.iterator();
-					while (ite.hasNext()) {
-						Object[] elements = (Object[]) ite.next();
-							clienteAux.setDocumentoReceitaFederal((String) elements[0]);
-							
-							clienteAux.setNome((String) elements[1]);
-							
-							clienteAux.setEmail((String) elements[2]);
-							
-							clienteAux.setTelefone((String) elements[3]);
-							
-							clienteAux.setCodigo((Integer) elements[4]);
-							
-							clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
-									(String) elements[8], (String) elements[9]));
-					}         
-				}
 			}
 		}    
 		return clienteAux;
@@ -349,26 +322,18 @@ public class Clientes implements Serializable {
 	}
 	
 	public Cliente porCpf(String cpf){
-		if(cpf==null){
-			System.err.println("O CPF TA NULL");
-		}
-		try{
-			return this.manager.createQuery("from Cliente where upper(documentoReceitaFederal) like :cpf", Cliente.class)
-					.setParameter("cpf", cpf.toUpperCase() + "%").getSingleResult();
-		}catch (NoResultException e) {
-		}
-		return null;
+		System.out.println("Busca por CPF no MySql");
+		
+				return this.manager.createQuery("from Cliente where upper(documentoReceitaFederal) like :cpf", Cliente.class)
+						.setParameter("cpf", cpf.toUpperCase() + "%").getSingleResult();
+		
 	}
+	
 	public Cliente porNome(String nome){
-		if(nome==null){
-			System.err.println("O NOME TA NULL");
-		}
-		try{
-			return this.manager.createQuery("from Cliente where upper(nome) like :nome", Cliente.class)
-					.setParameter("nome", nome.toUpperCase() + "%").getSingleResult();
-		}catch (NoResultException e) {
-		}
-		return null;
+		
+				return this.manager.createQuery("from Cliente where upper(nome) like :nome", Cliente.class)
+						.setParameter("nome", nome.toUpperCase() + "%").getSingleResult();
+			
 	}
 	
 	

@@ -80,18 +80,20 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 		this.cliente.setNome(this.nome);
 		this.cliente.setDocumentoReceitaFederal(this.cpf);
 		
+		System.out.println("ATUALIZAR CLIENTE FIREBIRD BEAN");
+		
 		cliente = cadastroClienteService.buscaCliente(cliente);
 		nome = cliente.getNome();
 		cpf = cliente.getDocumentoReceitaFederal();
 		
-		if(cliente.getId()==null){
-			Cliente clienteAux = new Cliente();
-				clienteAux = clientes.porCpf(cpf);
-				if(clienteAux!=null){
-					cliente = clienteAux;
-				}
-			
-		}
+//		if(cliente.getId()==null){
+//			Cliente clienteAux = new Cliente();
+//				clienteAux = clientes.porCpf(cpf);
+//				if(clienteAux!=null){
+//					cliente = clienteAux;
+//				}
+//			
+//		}
 
 	}	
 

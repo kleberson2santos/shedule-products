@@ -28,47 +28,42 @@ public class Endereco implements Serializable {
 		this.cep = cep;
 	}
 
-	@Column(nullable = false, length = 150)
+	@Column(length = 150)
 	public String getLogradouro() {
 		return logradouro;
 	}
-
 	public void setLogradouro(String logradouro) {
 		this.logradouro = logradouro;
 	}
 
-	@Column(length = 500)
+	@Column(length = 1000)
 	public String getComplemento() {
 		return complemento;
 	}
-
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
 
-	@Column(nullable = false, length = 60)
+	@Column( length = 60)
 	public String getCidade() {
 		return cidade;
 	}
-
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
 
-	@Column(nullable = false, length = 60)
+	@Column( length = 60)
 	public String getUf() {
 		return uf;
 	}
-
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
 
-	@Column(nullable = false, length = 9)
+	@Column( length = 9)
 	public String getCep() {
 		return cep;
 	}
-
 	public void setCep(String cep) {
 		this.cep = cep;
 	}

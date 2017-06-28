@@ -40,7 +40,7 @@ public class CadastroAgendamentoBean implements Serializable {
 	@AgendamentoEdicao
 	private Agendamento agendamento;
 	
-	private Cliente clienteFilter;
+	private Cliente cliente;
 	private List<NotaFiscal> saidasFirebird;
 	private ClienteFilter filtro;
 	private List<NotaFiscal> notasSelecionadas = new ArrayList<NotaFiscal>();
@@ -58,22 +58,24 @@ public class CadastroAgendamentoBean implements Serializable {
 			limpar();
 		}else{
 			setSaidasSelecionadas(agendamento.getSaidas());	
+			this.cliente = agendamento.getCliente();
 		}
 	}
 
 	private void limpar() {
 		agendamento = new Agendamento();
-		clienteFilter = new Cliente();
+		cliente = new Cliente();
+		cliente.setEndereco(new Endereco());
 		filtro = new ClienteFilter();
 		saidasFirebird = new ArrayList<>();
 		notasSelecionadas = new ArrayList<NotaFiscal>();
 		saidasCodigos = new ArrayList<Integer>();
 		agendamento.getItens().clear();
-		clienteFilter.setEndereco(new Endereco());
+		agendamento.setCliente(cliente);
 	}
 
 	public void clienteSelecionado(SelectEvent event){
-		this.clienteFilter = (Cliente)event.getObject();
+		this.cliente = (Cliente)event.getObject();
 		atualizarSaidas();
 		agendamento.setCliente((Cliente)event.getObject());		
 	}
@@ -85,7 +87,7 @@ public class CadastroAgendamentoBean implements Serializable {
 	private void atualizarSaidas() {
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
-		saidasFirebird = clientes.buscarSaidasPorCliente(this.clienteFilter);
+		saidasFirebird = clientes.buscarSaidasPorCliente(this.cliente);
 		this.agendamento.setSaidas(saidasFirebird);
 	}
 
@@ -115,10 +117,10 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	
 	public Cliente getCliente() {
-		return clienteFilter;
+		return cliente;
 	}
 	public void setCliente(Cliente cliente) {
-		this.clienteFilter = cliente;
+		this.cliente = cliente;
 	}
 
 	public Agendamento getAgendamento() {
@@ -157,14 +159,15 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	@NotBlank
 	public String getNomeCliente() {
-		
+		System.out.println(" GET NOMECLIENTE");
 		String nome = agendamento.getCliente() == null ? null : agendamento.getCliente().getNome();
 		
-		this.saidasFirebird = clientes.buscarSaidasPorCliente(agendamento.getCliente());
+		//this.saidasFirebird = clientes.buscarSaidasPorCliente(agendamento.getCliente());
 		
 		return nome;
 	}
 	public void setNomeCliente(String nome) {
+		System.out.println(" GET NOMECLIENTE");
 	}
 	
 	public Date getDataAgendamentoSelecionada() {
@@ -188,12 +191,11 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 
 	public void salvar() throws NegocioException {
+		System.out.println(" Salvar agendamento");
 		
 		if(!agendamento.isNovo()){
 			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);
 		}
-
-		
 		if (agendamento.getItens().isEmpty()) {
 			FacesUtil.addWarningMessage("Informe pelo menos um item no agendamento!");
 		} else {

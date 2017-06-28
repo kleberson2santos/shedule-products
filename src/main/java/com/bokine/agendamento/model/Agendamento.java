@@ -41,6 +41,11 @@ public class Agendamento implements Serializable {
 	private List<ItemMontagem> itens = new ArrayList<>();
 	private List<NotaFiscal> notasFiscais = new ArrayList<NotaFiscal>();
 	
+	public Agendamento() {
+		System.out.println("CONSTRUINDO AGENDAMENTO");
+		this.cliente = new Cliente();
+		this.cliente.setEndereco(new Endereco());
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {

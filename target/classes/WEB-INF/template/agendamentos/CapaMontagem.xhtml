@@ -27,7 +27,7 @@
 
 		<p:outputLabel value="Data da Montagem" for="dataMontagem" />
 		<h:panelGroup>
-			<p:calendar id="dataMontagem" size="15" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-4" locale="pt" readonlyInput="true" 
+			<p:calendar id="dataMontagem" size="15" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-4" locale="pt" readonlyInput="true" required="true"
 				value="#{cadastroAgendamentoBean.agendamento.dataMontagem}" disabled="#{cadastroAgendamentoBean.agendamento.naoAlteravel}"/>
 			<p:commandButton icon="ui-icon-search" title="Disponibilidade" process="@this"
 	        	update="@none" rendered="#{cadastroAgendamentoBean.agendamento.alteravel}"
@@ -41,7 +41,7 @@
 		<p:outputLabel value="Cliente" for="cliente"/>
         <h:panelGroup>
 	        <p:inputText id="cliente" size="40" value="#{cadastroAgendamentoBean.nomeCliente}" 
-	        	readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" />
+	        	readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}" required="true"/>
 	        	
 	        <p:commandButton icon="ui-icon-search" title="Pesquisar" process="@this"
 	        	update="@none"
