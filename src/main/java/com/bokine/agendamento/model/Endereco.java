@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 
 @Embeddable
 public class Endereco implements Serializable {
@@ -36,7 +37,7 @@ public class Endereco implements Serializable {
 		this.logradouro = logradouro;
 	}
 
-	@Column(length = 1000)
+	@Lob
 	public String getComplemento() {
 		return complemento;
 	}
