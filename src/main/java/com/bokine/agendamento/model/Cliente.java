@@ -139,12 +139,6 @@ public class Cliente implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Cliente [id=" + id + ", codigo=" + codigo + ", nome=" + nome + ", email=" + email
-				+ ", documentoReceitaFederal=" + documentoReceitaFederal + ", telefone=" + telefone + ", tipo=" + tipo
-				+ ", endereco=" + endereco + ", agendamentos=" + agendamentos + "]";
-	}
 	@Transient
 	public boolean isNovo(){
 		return getId()==null;

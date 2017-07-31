@@ -29,14 +29,10 @@ public class CadastroProdutoService implements Serializable {
 	
 
 	public Produto salvarAntes(Produto produto){
-			System.out.println("> SERVICE REGRAS SALVAR ANTES: "+produto);
 			Produto produtoAux = new Produto();
 			Produto produtoExistente = produtos.porSku(produto.getSku());
 			
 			if (produtoExistente != null && !produtoExistente.equals(produto)) {
-				System.err.println("------------------------------------------------");
-				System.err.println(">>> Já existe um produto com o SKU informado.");
-				System.err.println("------------------------------------------------");
 				return produtoExistente;
 			}else{
 				produtoAux = produtos.guardar(produto);

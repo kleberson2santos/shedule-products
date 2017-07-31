@@ -41,6 +41,8 @@ public class RelatorioMontagensAgendadasBean implements Serializable {
 		parametros.put("data_inicio", this.dataInicio);
 		parametros.put("data_fim", this.dataFim);
 		
+		System.out.println("Parametros: DTA_INICIO= "+dataInicio+" DTA_FIM= "+dataFim);
+		
 		ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/relatorio_montagens_agendadas.jasper",
 				this.response, parametros, "Montagens agendadas.pdf");
 		

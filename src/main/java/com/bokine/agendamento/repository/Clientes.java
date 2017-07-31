@@ -165,12 +165,6 @@ public class Clientes implements Serializable {
 		}
 		return null;
 	}
-		
-	
-//	public Agendamento guardar(Agendamento agendamento) {
-//		return this.manager.merge(agendamento);
-//	}
-//	
 	
 	public Cliente guardar(Cliente cliente) {
 		return this.manager.merge(cliente);
@@ -230,13 +224,12 @@ public class Clientes implements Serializable {
 			produto.setRotulo((String) elements[1]);
 			produto.setCodigo((String) elements[2]);
 			produto.setNota(new NotaFiscal((Integer) elements[3], (Integer) elements[4]));
-			//notaTemp = produto.getNota().getNota().toString();
 			produto.setQuantidadeEstoque(1);
 			produto.setSku("MM"+0+0+((String) elements[2]).replaceAll("[^0-9]", ""));
-			System.out.println("produto SKU TRANSFORMADO: "+produto.getSku());
 			produto.setValorUnitario(new BigDecimal("0.00"));
 			
 			produto = cadastroProdutoService.salvarAntes(produto);
+			
 			produto.setNota(new NotaFiscal((Integer) elements[3], (Integer) elements[4]));
 			if(produto.getId()!=null){
 				ItemMontagem item = new ItemMontagem(produto);
@@ -248,15 +241,23 @@ public class Clientes implements Serializable {
 	}
 	
 	private String sqlFormatedList(List<Integer> list){
-		
-		 StringBuilder sb = new StringBuilder();
-		 sb.append("(");
-		 for (Integer i : list){
-		   sb.append(i+",");
-		 }
-		 sb.deleteCharAt(sb.length() -1);
-		 sb.append(")");
-		 return sb.toString();
+		StringBuilder sb = new StringBuilder();
+		if(list.size()>1){
+			sb.append("(");
+			for (Integer i : list){
+				sb.append(i+",");
+			}
+			sb.deleteCharAt(sb.length() -1);
+			sb.append(")");
+			return sb.toString();			
+		}else
+			if(list.size()==1){
+				sb.append("(");
+				sb.append(list.get(0));
+				sb.append(")");
+				return sb.toString();
+			}
+		return "";
 		}
 	
 	public Cliente buscaClienteFirebird(Cliente cliente) {

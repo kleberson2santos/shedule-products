@@ -102,17 +102,6 @@ public class ItemMontagem implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	@Override
-	public String toString() {
-		return "[Id:"+
-				id+
-		" produto:"+
-		produto+
-		" statusItem:"+
-		statusItem
-				+ "]";
-	}
-	
+	}	
 
 }

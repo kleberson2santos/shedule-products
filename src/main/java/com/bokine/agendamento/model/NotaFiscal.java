@@ -94,11 +94,4 @@ public class NotaFiscal implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "NotaFiscal [id=" + id + ", saida=" + saida + ", nota=" + nota + "]";
-	}
-
-	
-
 }

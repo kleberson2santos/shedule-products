@@ -22,7 +22,7 @@
 	</persistence-unit>
 	<persistence-unit name="Corporativo">
 		<properties>		
-			<property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql:localhost/3050:C:/sys/base/BKN00001?charSet=ISO8859_1"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql:192.168.5.248/3050:C:/DataBase/BKN00001?charSet=ISO8859_1"/>
 			<property name="hibernate.connection.password" value="masterkey"/>
 			<property name="hibernate.connection.username" value="sysdba"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>

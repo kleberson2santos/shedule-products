@@ -98,7 +98,6 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	public void atualizarProdutos() {
 		limparSaidas();
-		notasSelecionadas.forEach(i -> System.out.println("[]-" + i));
 		List<ItemMontagem> itens = new ArrayList<ItemMontagem>();
 		for (NotaFiscal notaFiscal : notasSelecionadas) {
 			this.saidasCodigos.add(notaFiscal.getSaida());

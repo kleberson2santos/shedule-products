@@ -159,13 +159,6 @@ public class Agendamento implements Serializable {
 		return result;
 	}
 	
-	@Override
-	public String toString() {
-		return "Agendamento [id=" + id + ", dataCriacao=" + dataCriacao + ", cliente=" + cliente + ", dataMontagem="
-				+ dataMontagem + ", observacao=" + observacao + ", usuario=" + usuario + ", status=" + status
-				+ ", itens=" + itens + ", notasFiscais=" + notasFiscais + "]";
-	}
-	
 	//UTILS
 	
 	@Transient
