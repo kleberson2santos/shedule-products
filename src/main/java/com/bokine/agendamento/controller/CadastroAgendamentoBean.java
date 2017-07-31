@@ -159,15 +159,10 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	@NotBlank
 	public String getNomeCliente() {
-		System.out.println(" GET NOMECLIENTE");
 		String nome = agendamento.getCliente() == null ? null : agendamento.getCliente().getNome();
-		
-		//this.saidasFirebird = clientes.buscarSaidasPorCliente(agendamento.getCliente());
-		
 		return nome;
 	}
 	public void setNomeCliente(String nome) {
-		System.out.println(" GET NOMECLIENTE");
 	}
 	
 	public Date getDataAgendamentoSelecionada() {
@@ -179,7 +174,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 	
 	// UTILS
-	
 
 	public boolean isEditando() {
 		return this.agendamento.getId() != null;

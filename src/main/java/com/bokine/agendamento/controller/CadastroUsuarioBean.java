@@ -35,9 +35,6 @@ public class CadastroUsuarioBean implements Serializable {
 			limpar();
 		}
 		grupos = cadastroUsuarioService.grupos();
-//		grupos.forEach(f -> {
-//			System.out.println(f.getNome());
-//		});
 
 	}
 	

@@ -42,7 +42,6 @@ public class Agendamento implements Serializable {
 	private List<NotaFiscal> notasFiscais = new ArrayList<NotaFiscal>();
 	
 	public Agendamento() {
-		System.out.println("CONSTRUINDO AGENDAMENTO");
 		this.cliente = new Cliente();
 		this.cliente.setEndereco(new Endereco());
 	}
@@ -241,6 +240,11 @@ public class Agendamento implements Serializable {
 	@Transient
 	private boolean isCancelado() {
 		return StatusAgendamento.CANCELADO.equals(this.getStatus());
+	}
+	
+	@Transient
+	public boolean isNaoEnviavelPorEmail() {
+		return this.isNovo() || this.isCancelado();
 	}
 	
 	@Transient

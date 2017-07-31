@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.NumberTool;
 
 import com.bokine.agendamento.model.Agendamento;
@@ -28,14 +29,15 @@ public class EnvioAgendamentoEmailBean implements Serializable {
 	@AgendamentoEdicao
 	private Agendamento agendamento;
 	
-	public void enviarPedido() {
+	public void enviarAgendamento() {
 		MailMessage message = mailer.novaMensagem();
 		
 		message.to(this.agendamento.getCliente().getEmail())
-			.subject("Pedido " + this.agendamento.getId())
+			.subject("Agendamento de Montagem N°" + this.agendamento.getId())
 			.bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/agendamento.template")))
-			.put("pedido", this.agendamento)
+			.put("agendamento", this.agendamento)
 			.put("numberTool", new NumberTool())
+			.put("dateToll", new DateTool())
 			.put("locale", new Locale("pt", "BR"))
 			.send();
 		

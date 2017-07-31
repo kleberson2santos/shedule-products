@@ -32,6 +32,7 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 	
 	private String nome= new String();
 	private String cpf = new String();
+	private String telefone = new String();
 
 
 	public void selecionar() {
@@ -67,6 +68,14 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 		this.cpf = cpf;
 	}
 	
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
 	public List<String> completarNome(String nome) {		
 		return clientes.porNomeFirebird(nome);
 	}
@@ -80,20 +89,10 @@ public class SelecaoClienteFirebirdBean implements Serializable {
 		this.cliente.setNome(this.nome);
 		this.cliente.setDocumentoReceitaFederal(this.cpf);
 		
-		System.out.println("ATUALIZAR CLIENTE FIREBIRD BEAN");
-		
 		cliente = cadastroClienteService.buscaCliente(cliente);
 		nome = cliente.getNome();
 		cpf = cliente.getDocumentoReceitaFederal();
-		
-//		if(cliente.getId()==null){
-//			Cliente clienteAux = new Cliente();
-//				clienteAux = clientes.porCpf(cpf);
-//				if(clienteAux!=null){
-//					cliente = clienteAux;
-//				}
-//			
-//		}
+		telefone = cliente.getTelefone();
 
 	}	
 

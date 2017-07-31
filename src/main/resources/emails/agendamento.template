@@ -6,6 +6,10 @@
                 <td>$agendamento.id</td>
             </tr>
             <tr>
+                <td style="width: 120px">Data da Montagem:</td>
+                <td>$dateToll.format('d-M-yyyy HH:mm',$agendamento.dataMontagem)</td>
+            </tr>
+            <tr>
                 <td>Cliente:</td>
                 <td>$agendamento.cliente.nome</td>
             </tr>
@@ -16,7 +20,7 @@
             <tr>
                 <th>Produto</th>
             </tr>
-            #foreach ($item in $pedido.itens)
+            #foreach ($item in $agendamento.itens)
             	#if ($item.produto.id)
 	            <tr>
 	                <td>$item.produto.nome</td>

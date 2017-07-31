@@ -260,11 +260,10 @@ public class Clientes implements Serializable {
 		}
 	
 	public Cliente buscaClienteFirebird(Cliente cliente) {
-		System.out.println("BUSCANDO NO BANCO DE DADOS FIREBIRD"+ cliente);
 		Cliente clienteAux = new Cliente();
 		if(!cliente.getDocumentoReceitaFederal().isEmpty() ){
-			Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, c.cel, c.cliente,"
-					+ " e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
+			Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail, e.fone, c.cliente,"
+					+ " e.logradouro, e.dicas_endereco,e.bairro, e.cidade, e.estado, e.cep"
 					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
 					+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
 					+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and c.cpf = ?1");
@@ -285,11 +284,11 @@ public class Clientes implements Serializable {
 					clienteAux.setCodigo((Integer) elements[4]);
 					
 					clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
-							(String) elements[8], (String) elements[9]));
+							(String) elements[8], (String) elements[9],(String) elements[10]));
 			}         
 		}else{
 			if(!cliente.getNome().isEmpty()){
-				Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail , c.cel, c.cliente, e.logradouro, e.dicas_endereco, e.cidade, e.estado, e.cep"
+				Query q = managerCorporativo.createNativeQuery("select c.cpf, c.nome, c.e_mail , e.fone, c.cliente, e.logradouro, e.dicas_endereco,e.bairro, e.cidade, e.estado, e.cep"
 					+ " from CLIENTES c inner join ENDERECOS_CADASTRO e on c.GERADOR = e.GERADOR"
 					+ " inner join SAIDAS s on s.CLIENTE=c.CLIENTE "
 					+ " inner join nf on s.SAIDA=nf.COD_OPERACAO  where c.CLIENTE NOT IN (31) and  c.nome like :nome")
@@ -310,7 +309,7 @@ public class Clientes implements Serializable {
 						clienteAux.setCodigo((Integer) elements[4]);
 						
 						clienteAux.setEndereco(new Endereco((String) elements[5], (String) elements[6], (String) elements[7], 
-								(String) elements[8], (String) elements[9]));
+								(String) elements[8], (String) elements[9], (String) elements[10]));
 				}         
 			}
 		}    
@@ -359,7 +358,6 @@ public class Clientes implements Serializable {
 
 	@Transactional
 	public void remover(ItemMontagem itemMontagem) throws NegocioException {
-		System.out.println("REMOVENDO ITEM");
 		try {
 			itemMontagem = manager.find(ItemMontagem.class, itemMontagem.getId());
 			manager.remove(itemMontagem);
