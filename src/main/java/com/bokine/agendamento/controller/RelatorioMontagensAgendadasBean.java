@@ -1,6 +1,7 @@
 package com.bokine.agendamento.controller;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,11 +39,9 @@ public class RelatorioMontagensAgendadasBean implements Serializable {
 
 	public void emitir() {
 		Map<String, Object> parametros = new HashMap<>();
-		parametros.put("data_inicio", this.dataInicio);
-		parametros.put("data_fim", this.dataFim);
 		
-		System.out.println("Parametros: DTA_INICIO= "+dataInicio+" DTA_FIM= "+dataFim);
-		
+		parametros.put("data_inicio",geraDataInicial(this.dataInicio));
+		parametros.put("data_fim",geraDataFinal(this.dataFim));
 		ExecutorRelatorio executor = new ExecutorRelatorio("/relatorios/relatorio_montagens_agendadas.jasper",
 				this.response, parametros, "Montagens agendadas.pdf");
 		
@@ -73,5 +72,26 @@ public class RelatorioMontagensAgendadasBean implements Serializable {
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
+	
+	private Date geraDataInicial(Date dataInicio) {
+		Calendar dataInicial = Calendar.getInstance();
+		dataInicial.setTime(dataInicio);
+		dataInicial.set(Calendar.HOUR_OF_DAY, 0);
+		dataInicial.set(Calendar.MINUTE, 0);
+		dataInicial.set(Calendar.SECOND, 0);
+		
+		return dataInicial.getTime();
+	}
+	
+	private Date geraDataFinal(Date dataFim) {
+		Calendar dataFinal = Calendar.getInstance();
+		dataFinal.setTime(dataFim);
+		dataFinal.add(Calendar.DAY_OF_MONTH, 1);
+		dataFinal.set(Calendar.HOUR_OF_DAY, 23);
+		dataFinal.set(Calendar.MINUTE, 59);
+		dataFinal.set(Calendar.SECOND, 59);
+		
+		return dataFinal.getTime();
+}
 
 }

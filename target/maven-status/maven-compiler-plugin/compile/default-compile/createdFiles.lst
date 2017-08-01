@@ -16,6 +16,7 @@ com/bokine/agendamento/controller/LoginBean.class
 com/bokine/agendamento/converter/UsuarioConverter.class
 com/bokine/agendamento/model/vo/DataQuantidade.class
 com/bokine/agendamento/model/Agendamento.class
+com/bokine/agendamento/controller/RelatorioMontagensPrevistasBean.class
 com/bokine/agendamento/controller/EnvioAgendamentoEmailBean.class
 com/bokine/agendamento/controller/SelecaoClienteBean.class
 com/bokine/agendamento/service/MontarAgendamentoService.class
@@ -24,7 +25,6 @@ com/bokine/agendamento/converter/ClienteConverter.class
 com/bokine/agendamento/util/jpa/Corporativo.class
 com/bokine/agendamento/model/NotaFiscal.class
 com/bokine/agendamento/security/SecurityWebApplicationInitializer.class
-com/bokine/agendamento/controller/RelatorioPedidosEmitidosBean.class
 com/bokine/agendamento/repository/Clientes.class
 com/bokine/agendamento/service/CancelamentoAgendamentoService.class
 com/bokine/agendamento/converter/GrupoConverter.class
@@ -39,6 +39,7 @@ com/bokine/agendamento/model/Produto.class
 com/bokine/agendamento/security/Seguranca.class
 com/bokine/agendamento/validation/SkuClientValidationConstraint.class
 com/bokine/agendamento/security/AppUserDetailsService.class
+com/bokine/agendamento/controller/RelatorioProdutosMontadosBean.class
 com/bokine/agendamento/repository/Agendamentos.class
 com/bokine/agendamento/service/CadastroClienteService.class
 com/bokine/agendamento/service/CadastroUsuarioService.class

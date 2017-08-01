@@ -111,10 +111,8 @@ public class CadastroAgendamentoBean implements Serializable {
 		}
 	}
 
-	
 	// GETTERS AND SETTERS
 
-	
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -184,7 +182,6 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 
 	public void salvar() throws NegocioException {
-		System.out.println(" Salvar agendamento");
 		
 		if(!agendamento.isNovo()){
 			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);

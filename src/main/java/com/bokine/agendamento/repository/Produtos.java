@@ -34,24 +34,19 @@ public class Produtos implements Serializable {
 
 	@Transactional
 	public Produto guardar(Produto produto) {
-		System.out.println("> REPOSITORY GUARDAR PRODUTO : " +produto);
 		return manager.merge(produto);
 	}
 	
 	
 	public Produto guardarAntes(Produto produto) {
-		System.out.println("> REPOSITORY GUARDAR ANTES O PRODUTO : " +produto);
 		Produto produtoRetornado = new Produto();
 		EntityTransaction trx = manager.getTransaction();
-		System.out.println("> TRANSACAO ATIVA?  : " +trx.isActive());
 		trx.begin();
 		
 			try {
 				manager.merge(produto);
 				manager.flush();
 				
-				
-				System.out.println(" BUSCA POR SKU: "+this.porSku(produto.getSku()));
 			} catch (Exception e) {
 				System.out.println(">>Houve um erro ao GUARDAR o objeto. "+e);
 			}
@@ -109,7 +104,6 @@ public class Produtos implements Serializable {
 	}
 	
 	public Produto porId(Long id) {
-		System.out.println("CHAMOU O BUSCA POR ID");
 		return manager.find(Produto.class, id);
 	}
 
