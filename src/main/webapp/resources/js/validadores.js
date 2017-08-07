@@ -25,7 +25,7 @@ PrimeFaces.locales['pt'] = {
     allDayText : 'Todo o Dia',	
     messages : {
 		'org.hibernate.validator.constraints.NotBlank.message' : '{0} não pode estar em branco',
-		'javax.validation.constraints.NotNull.message' : '{0} não pode ser nulo'
+		'javax.validation.constraints.NotNull.message' : '{0} não pode ser nulo'}
 };
 
 PrimeFaces.validator.NotNull = {

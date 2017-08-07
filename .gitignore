@@ -1,3 +1,4 @@
 src/main/resources/META-INF/persistence.xml
 src/main/resources/mail.properties
 /Montagem/target
+/target/
