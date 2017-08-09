@@ -9,19 +9,32 @@
 				id="tabelaItens" style="margin-top: 20px;margin-bottom: 20px;" emptyMessage="Nenhum item encontrado." 
 				var="item" value="#{cadastroAgendamentoBean.agendamento.itens}" >
 
-				<p:column headerText="Id"
-					style="text-align: left; width: 100px">
+				<p:column headerText="Código"
+					style="text-align: center; width: 20px">
 					<h:outputText value="#{item.produto.id}"/>
 				</p:column>
 				<p:column headerText="Produto"
-					style="text-align: left; width: 100px">
+					style="text-align: center; width: 100px">
 					<h:outputText value="#{item.produto.rotulo}"/>
 				</p:column>
-				<p:column headerText="Nota" style="width: 100px">
+				<p:column headerText="Nota" style="text-align: center;width: 100px">
 					<h:outputText value="#{item.notaFiscal}" />
 				</p:column>
-				<p:column headerText="Status" style="width: 100px">
-					<h:outputText value="#{item.statusItem.descricao}" />
+				<p:column headerText="Status" style="text-align: center;width: 100px">
+					<p:splitButton value="#{item.statusItem.descricao}">
+				        <p:menuitem value="Montado" update="tabelaItens" icon="ui-icon-arrowrefresh-1-w" 
+				        	actionListener="#{cadastroAgendamentoBean.alteraStatusMontado(item)}" 
+				        	rendered="#{cadastroAgendamentoBean.verificaStatusMontavel(item)}"/>
+				        <p:menuitem value="Cancelado" update="tabelaItens" icon="ui-icon-arrowrefresh-1-w" 
+				        	actionListener="#{cadastroAgendamentoBean.alteraStatusCancelado(item)}" 
+				        	rendered="#{cadastroAgendamentoBean.verificaStatusMontavel(item)}"/>
+				        <p:menuitem value="Assistência" update="tabelaItens" icon="ui-icon-arrowrefresh-1-w" 
+				        	actionListener="#{cadastroAgendamentoBean.alteraStatusAssistencia(item)}" 
+				        	rendered="#{cadastroAgendamentoBean.verificaStatusAssistenciavel(item)}"/>
+				        <p:menuitem value="Remontado" update="tabelaItens" icon="ui-icon-arrowrefresh-1-w" 
+				        	actionListener="#{cadastroAgendamentoBean.alteraStatusRemontado(item)}"
+				        	rendered="#{cadastroAgendamentoBean.verificaStatusRemontavel(item)}"/>
+				    </p:splitButton>
 				</p:column>
 				
 			</p:dataTable>

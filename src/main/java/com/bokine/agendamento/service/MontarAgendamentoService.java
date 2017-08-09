@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import com.bokine.agendamento.model.Agendamento;
+import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.StatusAgendamento;
 import com.bokine.agendamento.model.StatusItem;
 import com.bokine.agendamento.repository.Agendamentos;
@@ -30,8 +31,11 @@ public class MontarAgendamentoService implements Serializable {
 			throw new NegocioException("Agendamento não pode ser montado com status "
 					+ agendamento.getStatus().getDescricao() + ".");
 		}
+				
+		agendamento.getItens().stream()
+		.filter((ItemMontagem i) -> i.getStatusItem().equals(StatusItem.PENDENTE))
+		.forEach((ItemMontagem i) -> i.setStatusItem(StatusItem.MONTADO));
 		
-		agendamento.getItens().forEach(item->item.setStatusItem(StatusItem.MONTADO));		
 		agendamento.setStatus(StatusAgendamento.MONTADO);
 		
 		agendamento = this.agendamentos.guardar(agendamento);

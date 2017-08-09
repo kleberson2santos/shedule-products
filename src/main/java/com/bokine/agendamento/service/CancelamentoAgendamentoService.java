@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import com.bokine.agendamento.model.Agendamento;
+import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.StatusAgendamento;
 import com.bokine.agendamento.model.StatusItem;
 import com.bokine.agendamento.repository.Agendamentos;
@@ -27,10 +28,10 @@ public class CancelamentoAgendamentoService implements Serializable {
 					+ agendamento.getStatus().getDescricao() + ".");
 		}
 		
-		if (agendamento.isAgendado()) {
-//			this.estoqueService.retornarItensEstoque(agendamento);
-		}
-		agendamento.getItens().forEach(item->item.setStatusItem(StatusItem.CANCELADO));
+		agendamento.getItens().stream()
+		.filter((ItemMontagem i) -> i.getStatusItem().equals(StatusItem.PENDENTE))
+		.forEach(item->item.setStatusItem(StatusItem.CANCELADO));
+		
 		agendamento.setStatus(StatusAgendamento.CANCELADO);
 		
 		agendamento = this.agendamentos.guardar(agendamento);

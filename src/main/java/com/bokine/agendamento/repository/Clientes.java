@@ -3,6 +3,7 @@ package com.bokine.agendamento.repository;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.bokine.agendamento.model.Endereco;
 import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.model.Produto;
+import com.bokine.agendamento.model.StatusAgendamento;
 import com.bokine.agendamento.service.CadastroProdutoService;
 import com.bokine.agendamento.service.NegocioException;
 import com.bokine.agendamento.util.jpa.Corporativo;
@@ -177,7 +179,11 @@ public class Clientes implements Serializable {
 					+ "on s.SAIDA = nf.COD_OPERACAO where s.CLIENTE = :cliente")
 					.setParameter("cliente", cliente.getCodigo().toString());
 			
-			List<NotaFiscal> saidasAgendadas = this.buscarSaidasSistema(cliente);
+			List<NotaFiscal> notasAgendadas = this.buscarNotasAgendadas(cliente);
+			System.out.println("NOTAS AGENDADAS PARA O CLIENTE:"+cliente.getNome());
+			for (NotaFiscal notaFiscal : notasAgendadas) {
+				System.out.println("Nota:"+notaFiscal.getNota());
+			}
 			
 			@SuppressWarnings("unchecked")
 			Collection<Object[]> results = q.getResultList();
@@ -185,7 +191,7 @@ public class Clientes implements Serializable {
 			while (ite.hasNext()) {
 				Object[] elements = (Object[]) ite.next();
 				boolean existeSaida = false;
-				for (NotaFiscal nf : saidasAgendadas) {
+				for (NotaFiscal nf : notasAgendadas) {
 					if(nf.getSaida().equals((Integer) elements[0]))
 						existeSaida=true;
 				}
@@ -194,13 +200,17 @@ public class Clientes implements Serializable {
 					notas.add(new NotaFiscal((Integer) elements[0],(Integer) elements[1]));
 				}
 			}
+			System.out.println("RETORNAR APENAS As NOTAs:");
+			for (NotaFiscal nota : notas) {
+				System.out.println("NOTA:"+nota.getNota());
+			}
 		}
 	return notas;
 	}
 
 	
 	public List<ItemMontagem> buscarProdutosPorSaidasSelecionadas(ArrayList<Integer> notas){
-		//String notaTemp = new String();
+		System.out.println("Buscar Produtos");
 		for (Integer i : notas) {
 			System.out.println(i);
 		}
@@ -338,7 +348,7 @@ public class Clientes implements Serializable {
 	
 	
 
-	public List<NotaFiscal> buscarSaidasSistema(Cliente filter) {
+	public List<NotaFiscal> buscarNotasAgendadas(Cliente filter) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<NotaFiscal> criteriaQuery = builder.createQuery(NotaFiscal.class);
 		
@@ -347,6 +357,10 @@ public class Clientes implements Serializable {
 		Join<Agendamento, Cliente> clienteJoin = agendamentoJoin.join("cliente", JoinType.INNER);
 
 		List<Predicate> predicates = new ArrayList<>();
+		Object[] statuses = {StatusAgendamento.AGENDADO,StatusAgendamento.MONTADO};
+		predicates.add(agendamentoJoin.get("status").in(statuses));
+		
+		
 		if (StringUtils.isNotBlank(filter.getNome())) {
 			predicates.add(builder.equal(clienteJoin.get("nome"), filter.getNome()));
 		}

@@ -41,7 +41,7 @@ public class NotaFiscal implements Serializable{
 	}
 
 	@NotNull
-	@Column(name="saida",unique=true, nullable = false, length = 20)
+	@Column(name="saida", nullable = false, length = 20)
 	public Integer getSaida() {
 		return saida;
 	}

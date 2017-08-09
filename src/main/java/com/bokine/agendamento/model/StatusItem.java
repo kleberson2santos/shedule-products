@@ -3,7 +3,9 @@ public enum StatusItem {
 
 	PENDENTE("Pendente"),
 	MONTADO("Montado"),
-	CANCELADO("Cancelado");
+	CANCELADO("Cancelado"),
+	ASSISTENCIA("Assistência"),
+	REMONTADO("Remontado");
 	
 	private final String descricao;
 	

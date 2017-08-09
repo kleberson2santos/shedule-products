@@ -19,6 +19,7 @@ import com.bokine.agendamento.model.Cliente;
 import com.bokine.agendamento.model.Endereco;
 import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
+import com.bokine.agendamento.model.StatusItem;
 import com.bokine.agendamento.repository.Clientes;
 import com.bokine.agendamento.repository.filter.ClienteFilter;
 import com.bokine.agendamento.service.CadastroAgendamentoService;
@@ -107,8 +108,16 @@ public class CadastroAgendamentoBean implements Serializable {
 			FacesUtil.addWarningMessage("A busca não retornou nenhum móvel!");
 		}
 		for (ItemMontagem itemMontagem : itens) {
+			verificaItem(itemMontagem);
 			agendamento.adiciona(itemMontagem);
 		}
+	}
+	
+	
+	//TODO
+	private boolean verificaItem(ItemMontagem item) {
+		//Verificar se o produto do item já está no sistema com os status montado,remontado,assistencia
+		return true;
 	}
 
 	// GETTERS AND SETTERS
@@ -207,6 +216,31 @@ public class CadastroAgendamentoBean implements Serializable {
 		} catch (NegocioException ne) {
 			FacesUtil.addErrorMessage(ne.getMessage());
 		}
+	}
+	
+	public void alteraStatusAssistencia(ItemMontagem item) {
+		item.setStatusItem(StatusItem.ASSISTENCIA);
+	}
+	public void alteraStatusCancelado(ItemMontagem item) {
+		item.setStatusItem(StatusItem.CANCELADO);
+	}
+	public void alteraStatusMontado(ItemMontagem item) {
+		item.setStatusItem(StatusItem.MONTADO);
+	}
+	public void alteraStatusRemontado(ItemMontagem item) {
+		item.setStatusItem(StatusItem.REMONTADO);
+	}
+	
+	public boolean verificaStatusRemontavel(ItemMontagem item) {
+		return item.getStatusItem().equals(StatusItem.ASSISTENCIA);
+	}
+	
+	public boolean verificaStatusAssistenciavel(ItemMontagem item) {
+		return item.getStatusItem().equals(StatusItem.MONTADO);
+	}
+	
+	public boolean verificaStatusMontavel(ItemMontagem item) {
+		return item.getStatusItem().equals(StatusItem.PENDENTE)||item.getStatusItem().equals(StatusItem.CANCELADO);
 	}
 
 }
