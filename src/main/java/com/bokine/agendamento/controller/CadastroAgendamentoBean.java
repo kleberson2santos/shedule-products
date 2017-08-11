@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -21,8 +24,10 @@ import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.model.StatusItem;
 import com.bokine.agendamento.repository.Clientes;
+import com.bokine.agendamento.repository.Notas;
 import com.bokine.agendamento.repository.filter.ClienteFilter;
 import com.bokine.agendamento.service.CadastroAgendamentoService;
+import com.bokine.agendamento.service.CadastroNotasService;
 import com.bokine.agendamento.service.NegocioException;
 import com.bokine.agendamento.util.jsf.FacesUtil;
 
@@ -33,9 +38,16 @@ public class CadastroAgendamentoBean implements Serializable {
 
 	@Inject
 	private Clientes clientes;
+	
+	@Inject
+	private Notas notas;
 
 	@Inject
 	private CadastroAgendamentoService cadastroAgendamentoService;
+	
+	@Inject
+	private CadastroNotasService cadastroNotasService;
+
 
 	@Produces
 	@AgendamentoEdicao
@@ -48,6 +60,7 @@ public class CadastroAgendamentoBean implements Serializable {
 	private ArrayList<Integer> saidasCodigos;
 	
 	private ItemMontagem itemSelecionado;
+	private List<ItemMontagem> itensCancelados = new ArrayList<ItemMontagem>();
 	private Date dataAgendamentoSelecionada;
 
 	public CadastroAgendamentoBean() {
@@ -86,9 +99,21 @@ public class CadastroAgendamentoBean implements Serializable {
 	}
 
 	private void atualizarSaidas() {
+		System.out.println("Bean - Atualizar saidas que vao pra tela");
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
-		saidasFirebird = clientes.buscarSaidasPorCliente(this.cliente);
+		saidasFirebird = notas.buscarSaidasPorCliente(this.cliente);
+		List<NotaFiscal> notasAgendadasCompleta = new ArrayList<NotaFiscal>();
+		
+		System.out.println("Se essa saida já foi agendada não tras pro bean");
+		
+		notasAgendadasCompleta = cadastroNotasService.notasAgendadasECompleta(this.cliente);
+		
+		System.out.println("notasAgendadasCompletas para esse cliente:"+notasAgendadasCompleta.size());
+		
+		for (NotaFiscal notaFiscal : notasAgendadasCompleta) {
+			saidasFirebird.removeIf(i -> i.getNota().equals(notaFiscal.getNota()));
+		}
 		this.agendamento.setSaidas(saidasFirebird);
 	}
 
@@ -97,30 +122,52 @@ public class CadastroAgendamentoBean implements Serializable {
 		this.saidasCodigos.clear();
 	}
 
-	public void atualizarProdutos() {
+	public void atualizarItens() {
 		limparSaidas();
 		List<ItemMontagem> itens = new ArrayList<ItemMontagem>();
 		for (NotaFiscal notaFiscal : notasSelecionadas) {
 			this.saidasCodigos.add(notaFiscal.getSaida());
 		}
+		
 		itens = clientes.buscarProdutosPorSaidasSelecionadas(saidasCodigos);
-		if (itens.isEmpty()) {
+		
+		
+		if(!itens.isEmpty()) {
+			for (ItemMontagem itemMontagem : itens) {
+				//PRECISO REMOVER OS ITENS QUE NAO ESTAO COM STATUS DE CANCELADO
+				System.out.println("Bean - Buscar Itens Cancelados...");
+				itensCancelados=cadastroAgendamentoService.buscaItensCancelados(itemMontagem);
+			}
+		}else {
 			FacesUtil.addWarningMessage("A busca não retornou nenhum móvel!");
 		}
-		for (ItemMontagem itemMontagem : itens) {
-			verificaItem(itemMontagem);
-			agendamento.adiciona(itemMontagem);
+		System.out.println("Bean - Itens cancelados "+itensCancelados.size());
+		if(itensCancelados.isEmpty()) {
+			for (ItemMontagem itemMontagem : itens) {
+				agendamento.adiciona(itemMontagem);	
+			}
+		}else{
+			for (ItemMontagem item : itens) {
+				for(ItemMontagem itemCancelado : itensCancelados) {
+					if(item.getNotaFiscal().equals(item.getNotaFiscal())&&item.getProduto().equals(itemCancelado.getProduto())) {
+						System.out.println("Bean -Produto é igual:"+item.getProduto().getRotulo()+" Nota:"+item.getNotaFiscal());
+						agendamento.adiciona(item);
+					}else 
+						if(item.getNotaFiscal().equals(item.getNotaFiscal())&&!item.getProduto().equals(itemCancelado.getProduto())){
+						System.out.println("Bean - Mesma nota mas nao e o mesmo produto nao adicionar:"+item.getProduto().getRotulo()
+								+" Status:"+item.getStatusItem());
+						System.out.println("pois o produto cancelado é:"+itemCancelado.getProduto().getRotulo()
+								+" Status:"+itemCancelado.getStatusItem());
+						}
+						else {
+							System.out.println("Bean - ADICIONA DE QUALQUER JEITO:"+item.getProduto().getRotulo());
+							agendamento.adiciona(item);
+						}
+				}
+			}
 		}
-	}
-	
-	
-	//TODO
-	private boolean verificaItem(ItemMontagem item) {
-		//Verificar se o produto do item já está no sistema com os status montado,remontado,assistencia
-		return true;
-	}
 
-	// GETTERS AND SETTERS
+	}
 
 	public Cliente getCliente() {
 		return cliente;
@@ -178,9 +225,6 @@ public class CadastroAgendamentoBean implements Serializable {
 		this.dataAgendamentoSelecionada = dataAgendamentoSelecionada;
 	}
 	
-	
-	// UTILS
-
 	public boolean isEditando() {
 		return this.agendamento.getId() != null;
 	}
@@ -191,7 +235,15 @@ public class CadastroAgendamentoBean implements Serializable {
 	
 
 	public void salvar() throws NegocioException {
-		
+		if(!itensCancelados.isEmpty()) {
+			ItemMontagem item = new ItemMontagem();
+			System.out.println("Atualizar notas canceladas...");
+			for (ItemMontagem itemMontagem : itensCancelados) {
+				System.out.println("Item cancelado:"+itemMontagem.getId()+" nota:"+itemMontagem.getNotaFiscal()+" - "+itemMontagem.getStatusItem());
+				item = cadastroAgendamentoService.atualizarStatusItem(itemMontagem);
+				System.out.println("Item atualizado xom sucesso! "+item.getStatusItem());
+			}
+		}
 		if(!agendamento.isNovo()){
 			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);
 		}

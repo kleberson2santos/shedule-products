@@ -173,6 +173,7 @@ public class Clientes implements Serializable {
 	}
 	
 	public List<NotaFiscal> buscarSaidasPorCliente(Cliente cliente) {
+		System.out.println("Buscar saidasPorCliente no Firebird");
 		notas= new ArrayList<NotaFiscal>();
 		if(cliente!=null){
 			Query q = managerCorporativo.createNativeQuery("select nf.COD_OPERACAO, nf.NOTA from nf inner join saidas s "
@@ -180,9 +181,8 @@ public class Clientes implements Serializable {
 					.setParameter("cliente", cliente.getCodigo().toString());
 			
 			List<NotaFiscal> notasAgendadas = this.buscarNotasAgendadas(cliente);
-			System.out.println("NOTAS AGENDADAS PARA O CLIENTE:"+cliente.getNome());
 			for (NotaFiscal notaFiscal : notasAgendadas) {
-				System.out.println("Nota:"+notaFiscal.getNota());
+				System.out.println("NotaAgendadaParaOCliente:"+notaFiscal.getNota());
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -190,27 +190,69 @@ public class Clientes implements Serializable {
 			Iterator<Object[]> ite = results.iterator();
 			while (ite.hasNext()) {
 				Object[] elements = (Object[]) ite.next();
-				boolean existeSaida = false;
 				for (NotaFiscal nf : notasAgendadas) {
 					if(nf.getSaida().equals((Integer) elements[0]))
-						existeSaida=true;
+						System.out.println("Essa nota já foi agendada:"+nf.getNota()+" saida:"+nf.getSaida());
+
 				}
-				if(existeSaida){
-				}else{
-					notas.add(new NotaFiscal((Integer) elements[0],(Integer) elements[1]));
-				}
+				notas.add(new NotaFiscal((Integer) elements[0],(Integer) elements[1]));
+
 			}
-			System.out.println("RETORNAR APENAS As NOTAs:");
-			for (NotaFiscal nota : notas) {
-				System.out.println("NOTA:"+nota.getNota());
-			}
+
 		}
 	return notas;
 	}
+	
+
+	public List<NotaFiscal> buscarNotasAgendadas(Cliente filter) {
+		System.out.println("Buscar notas agendadas no sistema");
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<NotaFiscal> criteriaQuery = builder.createQuery(NotaFiscal.class);
+		
+		Root<NotaFiscal> notaRoot = criteriaQuery.from(NotaFiscal.class);
+		Join<NotaFiscal, Agendamento> agendamentoJoin = notaRoot.join("agendamento", JoinType.INNER);
+		Join<Agendamento, Cliente> clienteJoin = agendamentoJoin.join("cliente", JoinType.INNER);
+
+		List<Predicate> predicates = new ArrayList<>();
+		
+		if (StringUtils.isNotBlank(filter.getNome())) {
+			predicates.add(builder.equal(clienteJoin.get("nome"), filter.getNome()));
+		}
+		criteriaQuery.select(notaRoot);
+		criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		
+		TypedQuery<NotaFiscal> query = manager.createQuery(criteriaQuery);
+		return query.getResultList();
+	}
+	
+	public List<NotaFiscal> buscarNotasAgendadas2(Cliente filter) {
+		System.out.println("Buscar notas agendadas no sistema");
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<NotaFiscal> criteriaQuery = builder.createQuery(NotaFiscal.class);
+		
+		Root<NotaFiscal> notaRoot = criteriaQuery.from(NotaFiscal.class);
+		Join<NotaFiscal, Agendamento> agendamentoJoin = notaRoot.join("agendamento", JoinType.INNER);
+		Join<Agendamento, Cliente> clienteJoin = agendamentoJoin.join("cliente", JoinType.INNER);
+
+		List<Predicate> predicates = new ArrayList<>();
+		Object[] statuses = {StatusAgendamento.AGENDADO,StatusAgendamento.MONTADO};
+		predicates.add(agendamentoJoin.get("status").in(statuses));
+		
+		
+		if (StringUtils.isNotBlank(filter.getNome())) {
+			predicates.add(builder.equal(clienteJoin.get("nome"), filter.getNome()));
+		}
+		criteriaQuery.select(notaRoot);
+		criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		
+		TypedQuery<NotaFiscal> query = manager.createQuery(criteriaQuery);
+		return query.getResultList();
+	}
+
 
 	
 	public List<ItemMontagem> buscarProdutosPorSaidasSelecionadas(ArrayList<Integer> notas){
-		System.out.println("Buscar Produtos");
+		System.out.println("Buscar Produtos por saidas selecionadas");
 		for (Integer i : notas) {
 			System.out.println(i);
 		}
@@ -344,31 +386,6 @@ public class Clientes implements Serializable {
 				return this.manager.createQuery("from Cliente where upper(nome) like :nome", Cliente.class)
 						.setParameter("nome", nome.toUpperCase() + "%").getSingleResult();
 			
-	}
-	
-	
-
-	public List<NotaFiscal> buscarNotasAgendadas(Cliente filter) {
-		CriteriaBuilder builder = manager.getCriteriaBuilder();
-		CriteriaQuery<NotaFiscal> criteriaQuery = builder.createQuery(NotaFiscal.class);
-		
-		Root<NotaFiscal> notaRoot = criteriaQuery.from(NotaFiscal.class);
-		Join<NotaFiscal, Agendamento> agendamentoJoin = notaRoot.join("agendamento", JoinType.INNER);
-		Join<Agendamento, Cliente> clienteJoin = agendamentoJoin.join("cliente", JoinType.INNER);
-
-		List<Predicate> predicates = new ArrayList<>();
-		Object[] statuses = {StatusAgendamento.AGENDADO,StatusAgendamento.MONTADO};
-		predicates.add(agendamentoJoin.get("status").in(statuses));
-		
-		
-		if (StringUtils.isNotBlank(filter.getNome())) {
-			predicates.add(builder.equal(clienteJoin.get("nome"), filter.getNome()));
-		}
-		criteriaQuery.select(notaRoot);
-		criteriaQuery.where(predicates.toArray(new Predicate[0]));
-		
-		TypedQuery<NotaFiscal> query = manager.createQuery(criteriaQuery);
-		return query.getResultList();
 	}
 
 	@Transactional

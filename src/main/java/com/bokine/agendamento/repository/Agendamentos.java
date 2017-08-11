@@ -26,6 +26,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import com.bokine.agendamento.model.Agendamento;
 import com.bokine.agendamento.model.Cliente;
+import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.model.Usuario;
 import com.bokine.agendamento.model.vo.DataQuantidade;
@@ -217,4 +218,17 @@ public class Agendamentos implements Serializable {
 				.getResultList();
 	}
 
+	public List<ItemMontagem> buscarItensCancelado(ItemMontagem item) {
+		TypedQuery<ItemMontagem> query = manager.createQuery(""
+				+ "select i from ItemMontagem i where i.statusItem='CANCELADO' and i.notaFiscal=:nota", ItemMontagem.class)
+				.setParameter("nota", item.getNotaFiscal());
+		List<ItemMontagem> results = query.getResultList();
+		return results;
+	}
+
+	public ItemMontagem atualizar(ItemMontagem itemMontagem) {
+		return manager.merge(itemMontagem);
+	}
+	
+	
 }
