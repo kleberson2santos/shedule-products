@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -99,18 +100,11 @@ public class CadastroAgendamentoBean implements Serializable {
 	}
 
 	private void atualizarSaidas() {
-		System.out.println("Bean - Atualizar saidas que vao pra tela");
 		saidasFirebird = new ArrayList<NotaFiscal>();
 		notasSelecionadas.clear();
 		saidasFirebird = notas.buscarSaidasPorCliente(this.cliente);
 		List<NotaFiscal> notasAgendadasCompleta = new ArrayList<NotaFiscal>();
-		
-		System.out.println("Se essa saida já foi agendada não tras pro bean");
-		
 		notasAgendadasCompleta = cadastroNotasService.notasAgendadasECompleta(this.cliente);
-		
-		System.out.println("notasAgendadasCompletas para esse cliente:"+notasAgendadasCompleta.size());
-		
 		for (NotaFiscal notaFiscal : notasAgendadasCompleta) {
 			saidasFirebird.removeIf(i -> i.getNota().equals(notaFiscal.getNota()));
 		}
@@ -128,20 +122,14 @@ public class CadastroAgendamentoBean implements Serializable {
 		for (NotaFiscal notaFiscal : notasSelecionadas) {
 			this.saidasCodigos.add(notaFiscal.getSaida());
 		}
-		
 		itens = clientes.buscarProdutosPorSaidasSelecionadas(saidasCodigos);
-		
-		
 		if(!itens.isEmpty()) {
 			for (ItemMontagem itemMontagem : itens) {
-				//PRECISO REMOVER OS ITENS QUE NAO ESTAO COM STATUS DE CANCELADO
-				System.out.println("Bean - Buscar Itens Cancelados...");
 				itensCancelados=cadastroAgendamentoService.buscaItensCancelados(itemMontagem);
 			}
 		}else {
 			FacesUtil.addWarningMessage("A busca não retornou nenhum móvel!");
 		}
-		System.out.println("Bean - Itens cancelados "+itensCancelados.size());
 		if(itensCancelados.isEmpty()) {
 			for (ItemMontagem itemMontagem : itens) {
 				agendamento.adiciona(itemMontagem);	
@@ -150,23 +138,16 @@ public class CadastroAgendamentoBean implements Serializable {
 			for (ItemMontagem item : itens) {
 				for(ItemMontagem itemCancelado : itensCancelados) {
 					if(item.getNotaFiscal().equals(item.getNotaFiscal())&&item.getProduto().equals(itemCancelado.getProduto())) {
-						System.out.println("Bean -Produto é igual:"+item.getProduto().getRotulo()+" Nota:"+item.getNotaFiscal());
 						agendamento.adiciona(item);
 					}else 
 						if(item.getNotaFiscal().equals(item.getNotaFiscal())&&!item.getProduto().equals(itemCancelado.getProduto())){
-						System.out.println("Bean - Mesma nota mas nao e o mesmo produto nao adicionar:"+item.getProduto().getRotulo()
-								+" Status:"+item.getStatusItem());
-						System.out.println("pois o produto cancelado é:"+itemCancelado.getProduto().getRotulo()
-								+" Status:"+itemCancelado.getStatusItem());
 						}
 						else {
-							System.out.println("Bean - ADICIONA DE QUALQUER JEITO:"+item.getProduto().getRotulo());
 							agendamento.adiciona(item);
 						}
 				}
 			}
 		}
-
 	}
 
 	public Cliente getCliente() {
@@ -233,29 +214,51 @@ public class CadastroAgendamentoBean implements Serializable {
 		this.agendamento = event.getAgendamento();
 	}
 	
-
 	public void salvar() throws NegocioException {
-		if(!itensCancelados.isEmpty()) {
-			ItemMontagem item = new ItemMontagem();
-			System.out.println("Atualizar notas canceladas...");
-			for (ItemMontagem itemMontagem : itensCancelados) {
-				System.out.println("Item cancelado:"+itemMontagem.getId()+" nota:"+itemMontagem.getNotaFiscal()+" - "+itemMontagem.getStatusItem());
-				item = cadastroAgendamentoService.atualizarStatusItem(itemMontagem);
-				System.out.println("Item atualizado xom sucesso! "+item.getStatusItem());
-			}
-		}
+		List<NotaFiscal>notasSelecionadasTemp = notasSelecionadas;
+		
 		if(!agendamento.isNovo()){
 			notasSelecionadas = cadastroAgendamentoService.buscarSaidas(agendamento);
-		}
-		if (agendamento.getItens().isEmpty()) {
-			FacesUtil.addWarningMessage("Informe pelo menos um item no agendamento!");
-		} else {
-			agendamento.adicionarSaidas(notasSelecionadas);
+		} 
+		if(!agendamento.getItens().isEmpty()) {
+			
+			if(notasSelecionadasTemp!=null) {
+				notasSelecionadas = verificarNotasSelecionadas(notasSelecionadasTemp);	
+			}
+			if(notasSelecionadas!=null) {
+				agendamento.adicionarSaidas(notasSelecionadas);
+			}
+			atualizarStatusItemCancelado();
 			agendamento = cadastroAgendamentoService.salvar(this.agendamento);
 			FacesUtil.addInfoMessage("Agendamento salvo com sucesso!");
 			limpar();
+		}else {
+			if (agendamento.getItens().isEmpty()) 
+				FacesUtil.addWarningMessage("Informe pelo menos um item no agendamento!");
 		}
+	}
 
+	private List<NotaFiscal> verificarNotasSelecionadas(List<NotaFiscal> notasSelecionadasTemp) {
+		
+		List<NotaFiscal>novaListadeNotas = new ArrayList<NotaFiscal>();
+		for (NotaFiscal nf : notasSelecionadasTemp) {
+			
+			Optional<ItemMontagem>itemMontagemOptional =  agendamento.getItens().stream()
+					.filter(i -> i.getNotaFiscal().equals(nf.getNota().toString()))
+					.findAny();
+			if(itemMontagemOptional.isPresent()) {
+				novaListadeNotas.add(nf);
+			}
+		}
+		return novaListadeNotas;
+	}
+
+	private void atualizarStatusItemCancelado() {
+		if(!itensCancelados.isEmpty()) {
+			for (ItemMontagem itemMontagem : itensCancelados) {
+				cadastroAgendamentoService.atualizarStatusItem(itemMontagem);
+			}
+		}
 	}
 	
 	public void excluirItem(){

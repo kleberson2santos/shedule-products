@@ -16,18 +16,15 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.bokine.agendamento.model.Agendamento;
 import com.bokine.agendamento.model.Cliente;
-import com.bokine.agendamento.model.Endereco;
 import com.bokine.agendamento.model.ItemMontagem;
 import com.bokine.agendamento.model.NotaFiscal;
 import com.bokine.agendamento.model.StatusItem;
 import com.bokine.agendamento.util.jpa.Corporativo;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 public class Notas implements Serializable{
 	
